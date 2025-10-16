@@ -93,7 +93,21 @@ system("pause");
 
 In C++ there're all well-known data types (_+ a bit more_):
 
-// TODO
+| Type | Bounds | Usage |
+|:----:|:-----:|:-----:|
+| `bool` | { false; true } or { 0; any number } | Representing a logical statement |
+| `short` | [ -32768; 32767 ] | Storing small `int`s |
+| `int` | [ -2147483648; 2147483647 ] | Storing medium-sized `int`s |
+| `long` | [ -2147483648; 2147483647 ] | Storing huge `int`s |
+| `float` | [ 1.17549e-38; 3.40282e+38 ] | Storing normal decimals |
+| `double` | [ 2.22507e-308; 1.79769e+308 ] | Storing precise decimals |
+| `long double` | [ 3.3621e-4932; 1.18973e+4932 ] | Storing exact decimals |
+| `signed char` | [ -128; 127 ] | Storing very small `int`s |
+| `unsigned char` | [ 0; 255 ] | Storing very small `int`s, single letter or character (_UTF-8_) |
+| `char` | [ -128; 127 ] or [ 0; 255 ] | Depending on compiler either as `signed char` or as `unsigned char` |
+| `wchar_t` | [ 0; 65535 ] or [ 0; 4.294.967.295 ] | Storing `int`s, single letter or character (_UTF-16 or UTF-32_) |
+
+Unsigned `int`s and `long`s have their ranges shifter to the positive side, e.g. `unsigned int`'s range is [ 0; 4294967295 ].
 
 To check limits of a certain data type check these functions of `limits` static library:
 
