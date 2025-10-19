@@ -11,7 +11,7 @@ To write the first program in any text editor consider completing following step
    - `MinGW` for Windows
    - `Clang` for Mac
 2. Create `.cpp` file with `int main() { return 0; }` function
-3. Compile with chosen compiler (_probably via CLI_)
+3. Compile with chosen compiler (_probably via CLI or with `shift` + `ctrl` + `b` in VSCode_)
 4. Run the executable
 
 To make life easier steps `3` and `4` can be automated by an IDE of your choice (_see related features and tutorials_).
