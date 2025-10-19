@@ -3,13 +3,20 @@
 
 using namespace std;
 
+// A2.1 Functions
 void CalculateMenuCalories();
 short AddCalories(short, int);
 
+// A2.2 Functions
 void RunCalculator();
 float GetNumberInput(string requestLine="Eingabe (Zahl):");
 char GetOperatorInput(string requestLine="Eingabe (Operator):");
 float Calculate(float, float, char);
+
+// A2.3 Functions
+void ValidateString(string);
+string CensorString(string, char censorChar='-');
+char GetCharValidationCode(char);
 
 int main() {
 
@@ -18,6 +25,9 @@ int main() {
 
     // A2.2
     RunCalculator();
+
+    // A2.3
+    ValidateString("");
 
     return 0;
 }
@@ -262,3 +272,87 @@ float Calculate(float a, float b, char operation) {
 }
 
 #pragma endregion [A2.2]
+#pragma region [A2.3]
+
+/**
+ * @brief Prints a valid string with invalid characters substituted with '-'.
+ * @param  invalidString: The string to validate.
+ */
+void ValidateString(string invalidString) {
+    cout << "[<] Überprüfe den String auf ungültige Zeichen: ";
+    cout << "'" << invalidString << "'" << endl;
+
+    string validString = CensorString(invalidString);
+
+    cout << "[>] Der valide String ist: " << validString << endl;
+}
+
+/**
+ * @brief Replaces all characters of a string which
+ *        aren't letters or digits with a censor character.
+ * @note Additionally count both allowed and disallowed chars.
+ * @param uncensoredString: The string to censor.
+ * @param censorChar: The char to replace disallowed chars with.
+ * @retval A censored string with allowed chars only.
+ */
+string CensorString(string uncensoredString, char censorChar) {
+    // Defining required variables
+    string censoredString;
+    char checkChar;
+    char charValidationCode;
+
+    int validCharsCount = 0;
+    int invalidCharsCount = 0;
+
+    //* Allowed chars and their codes:
+    // {45} - '_'
+    // [48; 57] - ['0'; '9']
+    // [65; 90] - ['A'; 'Z']
+    // [97; 122] - ['a'; 'z']
+
+    // Iterating through the string
+    for (size_t i = 0; i < uncensoredString.length(); i++) {
+        // Accessing the string's char
+        checkChar = uncensoredString[i];
+        // and checking, whether it's a valid one or not
+        charValidationCode = GetCharValidationCode(checkChar);
+
+        // If char's invalid -> add the censorChar to the output,
+        // If char's valid -> add itself instead
+        switch (charValidationCode) {
+            case '-': {
+                censoredString += censorChar;
+                invalidCharsCount++;
+                break;
+            }
+            default: {
+                censoredString += checkChar;
+                validCharsCount++;
+            }
+        }
+    }
+
+    // Printing some additional output (。・ω・。)
+    cout << " |-<*> Amount of valid chars: " << validCharsCount << endl;
+    cout << " |-<*> Amount of invalid chars: " << invalidCharsCount << endl;
+
+    return censoredString;
+}
+
+/**
+ * @brief Converts given digit ('0'), letter in upper or
+ *        lower case ('A' or 'a') or underscore ('_')
+ *        into its (respective) char code.
+ * @param c: The char to get the code of.
+ * @retval A char representing the code of the given one.
+ */
+char GetCharValidationCode(char c) {
+    if (95 == c) return '_';
+    if (48 <= c && c <= 57) return '0';
+    if (65 <= c && c <= 90) return 'A';
+    if (97 <= c && c <= 122) return 'a';
+
+    return '-';
+}
+
+#pragma endregion [A2.3]
