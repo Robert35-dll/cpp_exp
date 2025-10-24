@@ -145,7 +145,7 @@ struct shoe {
     string brand = "notSpecified";
     eZipper zipper = notSet;
     string colorName = "notSpecified";
-}
+};
 
 shoe shoe1;
 shoe shoe2;
