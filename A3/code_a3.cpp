@@ -6,6 +6,7 @@
 
 using namespace std;
 
+// A3.1 Functions
 void ReadSeries();
 vector<int> EraseValues(vector<int>, int);
 void CopyToArray(vector<int>, int[]);
@@ -43,13 +44,13 @@ void ReadSeries() {
             inputNumber = stod(rawInput);
             // Skipping the iteration upon negative values less than -1
             if (inputNumber < -1) {
-                throw out_of_range("");
+                throw out_of_range("Eingabe manuell unterbrochen.");
             }
             // or upon non-integer numbers
             //* Thanks to Zeilinger for the idea of this type check
             //* https://cplusplus.com/forum/general/41273/#msg222521
             if (inputNumber != floor(inputNumber)) {
-                throw invalid_argument("");
+                throw invalid_argument("int wurde erwartet aber float bekommen.");
             }
         } catch (invalid_argument) {
             cout << "[!] Es muss doch eine ganze Zahl sein >:(" << endl;
@@ -64,7 +65,7 @@ void ReadSeries() {
         
         // Breaking inputs upon receiving -1 and logging saved values
         if (inputNumber == -1) {
-            cout << "[*] Eingabe unterbrochen" << endl;
+            cout << " |-<!> Eingabe unterbrochen" << endl;
             cout << "[<] Gespeicherte Werte:" << endl;
             
             PrintContainer(inputSeries);
@@ -95,12 +96,24 @@ void ReadSeries() {
     PrintContainer(outputSeries, inputSeries.size());
 }
 
+/**
+ * @brief Removes certain value from a vector.
+ * @note This function might work more efficient
+ *       using pointers yet to be learned.
+ * @param v: The vector to remove values from.
+ * @param target: The value to remove.
+ * @retval A vector without specified values.
+ */
 vector<int> EraseValues(vector<int> v, int target) {
+    // Iterating through the vector
     for (size_t i = 0; i < v.size(); i++) {
+        // Skipping non-target values
         if (v.at(i) != target) {
             continue;
         }
         
+        // and removing the right ones
+        //* Note: removing a value shrinks the vector by 1
         v.erase(v.begin() + i);
         i--;
     }
@@ -108,18 +121,33 @@ vector<int> EraseValues(vector<int> v, int target) {
     return v;
 }
 
+/**
+ * @brief Writes values from a vector into an array.
+ * @note The array is to be assumed to be of the same length as the vector.
+ * @param v: The vector to copy values from.
+ * @param a[]: The array to copy values into.
+ */
 void CopyToArray(vector<int> v, int a[]) {
     for (size_t i = 0; i < v.size(); i++) {
         a[i] = v.at(i);
     }
 }
 
+/**
+ * @brief Outputs a container into CLI.
+ * @param v: The vector to output values of.
+ */
 void PrintContainer(vector<int> v) {
     for (size_t i = 0; i < v.size(); i++) {
         cout << " |-< [" << i << "]: " << v.at(i) << endl;
     }
 }
 
+/**
+ * @brief Outputs a container into CLI.
+ * @param a[]: The array to output values of.
+ * @param size: The size of the array.
+ */
 void PrintContainer(int a[], size_t size) {
     for (size_t i = 0; i < size; i++) {
         cout << " |-< [" << i << "]: " << a[i] << endl;

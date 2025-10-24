@@ -108,6 +108,17 @@ for (size_t i = 0; i < stlArray.size(); i++) {
 const size_t maxsize = stlArray.max_size();
 ```
 
+Funny notice:
+```c++
+// This works
+int nums[2] = { 1 };
+cout << nums[2] << endl;
+
+// This likely not (may depend on compiler)
+string strs[2] = { "1" };
+cout << nums[2] << endl;    // Error: Segmentation Fault
+```
+
 ### Custom Data Types
 
 In C++ there's a feature that allows you to rename certain data types or define a new one:
