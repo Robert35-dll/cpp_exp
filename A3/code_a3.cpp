@@ -7,6 +7,7 @@
 using namespace std;
 
 void ReadSeries();
+vector<int> EraseValues(vector<int>, int);
 void PrintContainer(vector<int>);
 void PrintContainer(array<int, 50>);
 
@@ -73,19 +74,25 @@ void ReadSeries() {
         inputSeries.push_back(inputNumber);
     }
     
-    // Removing all elements that equal 5 and copying all other to the array
-    for (size_t i = 0; i < inputSeries.size(); i++) {
-        if (inputSeries.at(i) == 5) {
-            inputSeries.erase(inputSeries.begin() + i);
-            i--;
-            continue;
-        }
-        // TODO: Resize output array
-        outputSeries.at(i) = inputSeries.at(i);
+    // Removing all elements that equal maximum size, if vector is full
+    if (inputSeries.size() == MAX_SIZE) {
+        cout << " |-<*> Entferne Werte gleich 5" << endl;
+        // This might become more efficient with pointers yet to be learned
+        inputSeries = EraseValues(inputSeries, 5);
     }
 
-    // Setting the stop value to break logging
-    outputSeries.at(inputSeries.size()) = -1;
+vector<int> EraseValues(vector<int> v, int target) {
+    for (size_t i = 0; i < v.size(); i++) {
+        if (v.at(i) != target) {
+            continue;
+        }
+        
+        v.erase(v.begin() + i);
+        i--;
+    }
+
+    return v;
+}
 
     PrintContainer(outputSeries);
 }
