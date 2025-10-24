@@ -23,14 +23,16 @@ int main() {
 #pragma region [A3.1]
 
 void ReadSeries() {
-    // Defining required variables and structures
+    // Defining required input variables and structures
+    const size_t MAX_SIZE = 50;
+
     vector<int> inputSeries;
     
     string rawInput;
     double inputNumber;
     
     // Reading maximum 50 positive ints
-    while (inputSeries.size() != 5) {
+    while (inputSeries.size() < MAX_SIZE) {
         // Requesting an input
         cout << "[>] Geben Sie eine ganze positive Zahl oder -1 ein: ";
         cin >> rawInput;
@@ -67,7 +69,7 @@ void ReadSeries() {
             
             PrintContainer(inputSeries);
             
-            return;
+            break;
         }
         
         // Saving the input
