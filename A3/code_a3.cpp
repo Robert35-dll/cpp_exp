@@ -8,8 +8,10 @@ using namespace std;
 
 void ReadSeries();
 vector<int> EraseValues(vector<int>, int);
+void CopyToArray(vector<int>, int[]);
+
 void PrintContainer(vector<int>);
-void PrintContainer(array<int, 50>);
+void PrintContainer(int[], size_t);
 
 int main() {
     // A3.1
@@ -23,7 +25,6 @@ int main() {
 void ReadSeries() {
     // Defining required variables and structures
     vector<int> inputSeries;
-    array<int, 50> outputSeries;
     
     string rawInput;
     double inputNumber;
@@ -81,6 +82,17 @@ void ReadSeries() {
         inputSeries = EraseValues(inputSeries, 5);
     }
 
+    // Defining the output array and copying values into it
+    int outputSeries[inputSeries.size()];
+
+    cout << " |-<*> Kopiere Werte aus dem Vektor in einen Array" << endl;
+    CopyToArray(inputSeries, outputSeries);
+
+    // Finally printing the output array
+    cout << "[<] Kopierte Werte:" << endl;
+    PrintContainer(outputSeries, inputSeries.size());
+}
+
 vector<int> EraseValues(vector<int> v, int target) {
     for (size_t i = 0; i < v.size(); i++) {
         if (v.at(i) != target) {
@@ -94,7 +106,10 @@ vector<int> EraseValues(vector<int> v, int target) {
     return v;
 }
 
-    PrintContainer(outputSeries);
+void CopyToArray(vector<int> v, int a[]) {
+    for (size_t i = 0; i < v.size(); i++) {
+        a[i] = v.at(i);
+    }
 }
 
 void PrintContainer(vector<int> v) {
@@ -103,12 +118,9 @@ void PrintContainer(vector<int> v) {
     }
 }
 
-void PrintContainer(array<int, 50> a) {
-    for (size_t i = 0; i < a.size(); i++) {
-        if (a.at(i) == -1) {
-            break;
-        }
-        cout << " |-< [" << i << "]: " << a.at(i) << endl;
+void PrintContainer(int a[], size_t size) {
+    for (size_t i = 0; i < size; i++) {
+        cout << " |-< [" << i << "]: " << a[i] << endl;
     }
 }
 
