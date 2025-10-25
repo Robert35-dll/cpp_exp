@@ -11,6 +11,8 @@ void ReadSeries();
 vector<int> EraseValues(vector<int>, int);
 void CopyToArray(vector<int>, int[]);
 
+double GetDoubleInput(string requestLine = "Geben Sie eine Gleitkommazahl ein",
+                      bool isSigned = true);
 void PrintContainer(vector<int>);
 void PrintContainer(int[], size_t);
 
@@ -29,8 +31,8 @@ Book CreateNewBook();
 int FindBookIndex(vector<Book>, string);
 int FindBookIndex(vector<Book>, int);
 
-int GetNumberInput(string requestLine = "Geben Sie eine Zahl ein",
-                   bool isSigned = true);
+int GetIntInput(string requestLine = "Geben Sie eine ganze Zahl ein",
+                bool isSigned = true);
 string GetStringInput(string requestLine = "Geben Sie einen Titel ein");
 
 void PrintContainer(vector<Book>);
@@ -54,35 +56,25 @@ void ReadSeries() {
     const size_t MAX_SIZE = 50;
 
     vector<int> inputSeries;
-    
-    string rawInput;
     double inputNumber;
     
     // Reading maximum 50 positive ints
     while (inputSeries.size() < MAX_SIZE) {
         // Requesting an input
-        cout << "[>] Geben Sie eine ganze positive Zahl oder -1 ein: ";
-        cin >> rawInput;
+        inputNumber = GetDoubleInput(
+            "Geben Sie eine ganze positive Zahl oder -1 ein"
+        );
         
-        // Checking, whether it's a positive int
-        // if not -> skip the iteration
-        try {
-            inputNumber = stod(rawInput);
-            // Skipping the iteration upon negative values less than -1
-            if (inputNumber < -1) {
-                throw out_of_range("Eingabe manuell unterbrochen.");
-            }
-            // or upon non-integer numbers
-            //* Thanks to Zeilinger for the idea of this type check
-            //* https://cplusplus.com/forum/general/41273/#msg222521
-            if (inputNumber != floor(inputNumber)) {
-                throw invalid_argument("int wurde erwartet aber float bekommen.");
-            }
-        } catch (invalid_argument) {
-            cout << "[!] Es muss doch eine ganze Zahl sein >:(" << endl;
+        // Skipping the iteration upon negative values less than -1
+        if (inputNumber < -1) {
+            cout << "[!] Es muss doch eine positive Zahl sein >:(\n |" << endl;
             continue;
-        } catch (out_of_range) {
-            cout << "[!] Es muss doch eine positive Zahl sein >:(" << endl;
+        }
+        // or upon non-integer numbers
+        //* Thanks to Zeilinger for the idea of this type check
+        //* https://cplusplus.com/forum/general/41273/#msg222521
+        if (inputNumber != floor(inputNumber)) {
+            cout << "[!] Es muss doch eine ganze Zahl sein >:(\n |" << endl;
             continue;
         }
         
@@ -164,6 +156,46 @@ void CopyToArray(vector<int> v, int a[]) {
     for (size_t i = 0; i < v.size(); i++) {
         a[i] = v.at(i);
     }
+}
+
+/**
+ * @brief Retrieves a `double` number from the user.
+ * @note This function keeps asking for input until a convertible string
+ *       is provided.
+ * @param requestLine: The line to request an input with.
+ * @param isSigned: Whether the number has to be positive or not.
+ * @retval A `double` number provided by user.
+ */
+double GetDoubleInput(string requestLine, bool isSigned) {
+    // Defining required variables
+    string rawInput;
+    double numberInput;
+    
+    while (true) {
+        // Asking for input
+        cout << "[>] " << requestLine << ": ";
+        cin >> rawInput;
+
+        // Trying to convert the input to float,
+        // if succeeded -> break the loop,
+        // if failed -> skip the iteration
+        try {
+            numberInput = stof(rawInput);
+            if (!isSigned && numberInput < 0) {
+                throw range_error("Keine positive Zahl eingegeben.");
+            }
+        } catch (invalid_argument) {
+            cout << "[!] Es muss doch eine Zahl sein!\n |" << endl;
+            continue;
+        } catch (range_error) {
+            cout << "[!] Es muss doch eine positive Zahl sein!\n |" << endl;
+            continue;
+        }
+        
+        break;
+    }
+
+    return numberInput;
 }
 
 /**
@@ -309,7 +341,7 @@ int GetManagementOption() {
         cout << "[-1] Programm beenden" << endl;
         cout << " |" << endl;
 
-        option = GetNumberInput();
+        option = GetIntInput();
         if (option == -1 || option == 1 || option == 2) {
             break;
         }
@@ -322,9 +354,9 @@ int GetManagementOption() {
 
 Book CreateNewBook() {
     Book newBook;
-    newBook.id = GetNumberInput("Geben Sie die ID vom Buch ein", false);
+    newBook.id = GetIntInput("Geben Sie die ID vom Buch ein", false);
     newBook.name = GetStringInput("Geben Sie den Titel vom Buch ein");
-    newBook.year = GetNumberInput("Geben Sie das Erscheinungsjahr ein");
+    newBook.year = GetIntInput("Geben Sie das Erscheinungsjahr ein");
 
     return newBook;
 }
@@ -362,7 +394,7 @@ int FindBookIndex(vector<Book> v, int target_id) {
     return -1;
 }
 
-int GetNumberInput(string requestLine, bool isSigned) {
+int GetIntInput(string requestLine, bool isSigned) {
     string rawInput;
     int numberInput;
     
@@ -377,8 +409,10 @@ int GetNumberInput(string requestLine, bool isSigned) {
             }
         } catch (invalid_argument) {
             cout << "[!] Es muss doch eine Zahl sein!\n |" << endl;
+            continue;
         } catch (range_error) {
             cout << "[!] Es muss doch eine positive Zahl sein!\n |" << endl;
+            continue;
         }
         
         break;
