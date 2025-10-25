@@ -320,7 +320,7 @@ void RunBookStore() {
         }
 
         // If validation failed -> do respective substeps
-        if (validationOption.length() >= 1 && validationOption.at(0) != 'n') {
+        if (validationOption.length() >= 1 && validationOption.at(0) == 'j') {
             // Step 2*
             // If an input's incorrect -> remove last book and go to Step 2
             if (option == 1) {
