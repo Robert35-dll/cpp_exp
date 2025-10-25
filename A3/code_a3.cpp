@@ -103,6 +103,13 @@ void ReadSeries() {
         //* Note: floats are converted to ints automatically
         inputSeries.push_back(inputNumber);
     }
+
+    // If nothing was put -> do nothing :)
+    if (inputSeries.size() == 0) {
+        cout << " |-<!> Keine Werte wurden gespeichert." << endl;
+        cout << "[^] Beende das Programm." << endl;
+        return;
+    }
     
     // Removing all elements that equal maximum size, if vector is full
     if (inputSeries.size() == MAX_SIZE) {
@@ -164,6 +171,11 @@ void CopyToArray(vector<int> v, int a[]) {
  * @param v: The vector to output values of.
  */
 void PrintContainer(vector<int> v) {
+    if (v.size() == 0) {
+        cout << " |-<!> Es gibt nichts :(" << endl;
+        return;
+    }
+
     for (size_t i = 0; i < v.size(); i++) {
         cout << " |-< [" << i << "]: " << v.at(i) << endl;
     }
@@ -175,6 +187,11 @@ void PrintContainer(vector<int> v) {
  * @param size: The size of the array.
  */
 void PrintContainer(int a[], size_t size) {
+    if (size == 0) {
+        cout << " |-<!> Es gibt nichts :(" << endl;
+        return;
+    }
+
     for (size_t i = 0; i < size; i++) {
         cout << " |-< [" << i << "]: " << a[i] << endl;
     }
@@ -233,9 +250,11 @@ void RunBookStore() {
             case 2: {
                 PrintContainer(bookStore);
 
-                validationOption = GetStringInput(
-                    "[?] Wollen Sie ein Buch entfernen? [j / n]"
-                );
+                if (bookStore.size() != 0) {
+                    validationOption = GetStringInput(
+                        "Wollen Sie ein Buch entfernen? [j / n]"
+                    );
+                }
                 break;
             }
             default: {
@@ -386,6 +405,11 @@ string GetStringInput(string requestLine) {
 }
 
 void PrintContainer(vector<Book> v) {
+    if (v.size() == 0) {
+        cout << " |-<!> Es gibt keine Bücher :(" << endl;
+        return;
+    }
+
     Book iBook;
     for (size_t i = 0; i < v.size(); i++) {
         iBook = v.at(i);
