@@ -180,46 +180,55 @@ void PrintContainer(int a[], size_t size) {
 #pragma region [A3.2]
 
 void RunBookStore() {
-    //* Step 1: Ask for input of a new book
-    //*         or for output of stored books
-    //*         or for exit
+    //* Step 1: Ask for input of a new book     -> Step 2
+    //*         or for output of stored books   -> Step 3
+    //*         or for exit                     -> Step 1*
+    //*         |
+    //* Step 1*:Prevent future requests and exit
 
-    //* Step 2: If input -> create new struct object via cin
-    //*                     add to the store (vector)
-    //*                     validate input
-    //*         If input's wrong -> remove and repeat step 2
-    //*         If input's right -> repeat step 1
+    //* Step 2: Create new struct object via cin
+    //*         add to the store (vector)
+    //*         validate input
+    //*         |
+    //* Step 2*:If input's wrong -> remove and go to step 2
+    //*         If input's right -> go to step 1
 
-    //* Step 3: If output -> ask for removal of a book (via index or name)
-    //*         If requested -> remove the book and repeat step 1
+    //* Step 3: List all available books
+    //*         Ask for removal of a book (per index or name)
+    //*         |
+    //* Step 3*:If requested -> remove the book and go to step 1
+    //*         If not       -> just go to step 1
 
     vector<Book> bookStore;
 
-    // Step 1: Asking for input or output
     string validationOption;
     int option = 0;
 
     while (option != -1) {
+        // Step 1: Asking for input or output
         option = option == 0 ? GetManagementOption() : option;
 
         switch (option) {
+            // Step 1.1: Exiting program
             case -1: {
                 cout << " |-<*> Beende das Programm" << endl;
                 continue;
             }
-            // Step 2: Adding a new book
+            // Step 2: Adding a new book and validating
             case 1: {
                 cout << " |-<*> Erstelle neues Buch..." << endl;
                 Book newBook = CreateNewBook();
                 bookStore.push_back(newBook);
+
                 validationOption = GetStringInput(
                     "[?] Ist das neue Buch falsch eingetragen? [j / n]"
                 );
                 break;
             }
-            // Step 3: Listing available books
+            // Step 3: Listing available books and validating
             case 2: {
                 PrintContainer(bookStore);
+
                 validationOption = GetStringInput(
                     "[?] Wollen Sie ein Buch entfernen? [j / n]"
                 );
@@ -234,21 +243,25 @@ void RunBookStore() {
             }
         }
 
-        // If an input's incorrect -> remove last book and ask for input again
+        // If validation failed -> do respective substeps
         if (validationOption.length() >= 1 && validationOption.at(0) != 'n') {
-            cout << " |-<*> Entferne das Buch..." << endl;
-
+            // Step 2*
+            // If an input's incorrect -> remove last book and go to Step 2
             if (option == 1) {
+                cout << " |-<*> Entferne das Buch..." << endl;
                 bookStore.pop_back();
-                
-                option = 1;
+
+                continue;
             }
+            // Step 3*
+            // If removal requested -> remove the book and go to Step 1
             if (option == 2) {
                 // TODO: Remove specific book
             }
             continue;
         }
 
+        // Returning to Step 1
         option = 0;
     }
 }
