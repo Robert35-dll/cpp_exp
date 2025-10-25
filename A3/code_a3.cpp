@@ -25,6 +25,10 @@ struct Book {
 void RunBookStore();
 int GetManagementOption();
 Book CreateNewBook();
+
+int FindBookIndex(vector<Book>, string);
+int FindBookIndex(vector<Book>, int);
+
 int GetNumberInput(string requestLine = "Geben Sie eine Zahl ein",
                    bool isSigned = true);
 string GetStringInput(string requestLine = "Geben Sie einen Titel ein");
@@ -256,9 +260,19 @@ void RunBookStore() {
             // Step 3*
             // If removal requested -> remove the book and go to Step 1
             if (option == 2) {
-                // TODO: Remove specific book
+                string bookId = GetStringInput(
+                    "Geben Sie den Titel oder die (ID) vom Buch ein"
+                );
+
+                int bookIndex = FindBookIndex(bookStore, bookId);
+                if (bookIndex != -1) {
+                    cout << " |-<*> Entferne das Buch..." << endl;
+                    bookStore.erase(bookStore.begin() + bookIndex);
+                }
+
+                option = 0;
+                continue;
             }
-            continue;
         }
 
         // Returning to Step 1
@@ -294,6 +308,39 @@ Book CreateNewBook() {
     newBook.year = GetNumberInput("Geben Sie das Erscheinungsjahr ein");
 
     return newBook;
+}
+
+int FindBookIndex(vector<Book> v, string target_name) {
+    try {
+        int target_id = stoi(target_name);
+        return FindBookIndex(v, target_id);
+    } catch (invalid_argument) {}
+
+    cout << " |-<*> Suche das Buch nach dem Titel..." << endl;
+
+    for (size_t i = 0; i < v.size(); i++) {
+        if (v.at(i).name == target_name) {
+            return i;
+        }
+    }
+
+    cout << " |-<!> Kein Buch mit dem Titel '";
+    cout << target_name << "' gefunden :(" << endl;
+    return -1;
+}
+
+int FindBookIndex(vector<Book> v, int target_id) {
+    cout << " |-<*> Suche das Buch nach der ID..." << endl;
+
+    for (size_t i = 0; i < v.size(); i++) {
+        if (v.at(i).id == target_id) {
+            return i;
+        }
+    }
+
+    cout << " |-<!> Kein Buch mit der ID '";
+    cout << target_id << "' gefunden :(" << endl;
+    return -1;
 }
 
 int GetNumberInput(string requestLine, bool isSigned) {
