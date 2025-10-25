@@ -305,6 +305,8 @@ void RunBookStore() {
                     validationOption = GetStringInput(
                         "Wollen Sie ein Buch entfernen? [j / n]"
                     );
+                } else {
+                    validationOption = "n";
                 }
                 break;
             }
