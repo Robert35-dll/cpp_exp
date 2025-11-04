@@ -1,6 +1,6 @@
 # Basics of C++
 
-To get started with programming in C++  
+This is the knowledge of my very first C++ class :D
 
 ## Creating C++ Programs
 
