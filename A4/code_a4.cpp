@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <cmath>
+#include <vector>
 
 using namespace std;
 
@@ -138,3 +139,60 @@ void TestRectangles()
 }
 
 #pragma endregion [A4.2]
+#pragma region [A4.3]
+
+struct Eintrag
+{
+    string name;
+    int nummer;
+};
+
+class SIMcard
+{
+    private:
+        vector<Eintrag> Telefonbuch;
+        unsigned int PIN;
+
+    public:
+        SIMcard(unsigned int pin_)
+            : PIN(pin_)
+        {}
+
+        bool trageEin(string name_, int nummer_, unsigned int pin_)
+        {
+            if (pin_ != PIN)
+            {
+                return false;
+            }
+
+            Eintrag neuerEintrag;
+            neuerEintrag.name = name_;
+            neuerEintrag.nummer = nummer_;
+
+            Telefonbuch.push_back(neuerEintrag);
+
+            return true;
+        }
+
+        int sucheNummer(string name_, unsigned int pin_)
+        {
+            if (pin_ != PIN)
+            {
+                return -1;
+            }
+
+            for (Eintrag e : Telefonbuch)
+            {
+                if (e.name == name_)
+                {
+                    return e.nummer;
+                }
+            }
+
+            return 0;
+        }
+};
+
+//TODO: Simple CLI
+
+#pragma endregion [A4.3]
