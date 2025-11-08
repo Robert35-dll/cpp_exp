@@ -5,6 +5,10 @@
 
 using namespace std;
 
+/**
+ * @brief Provides methods to en-/decrypt a certain text
+ *        using Caesar's cipher algorithm.
+ */
 class Caesar
 {
     private:
@@ -13,8 +17,8 @@ class Caesar
     public:
         Caesar(int cipherKey_ = 2)
             : StandardKey(cipherKey_)
-        {};
-        ~Caesar() {};
+        {}
+        ~Caesar() {}
 
         string Cipher(string decipheredText);
         string Cipher(string decipheredText, int cipherKey);

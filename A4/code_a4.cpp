@@ -34,19 +34,21 @@ int main()
 void TestCaesarCiphering()
 {
     Caesar caesar;
+    int customCipherKey = -5;
+
     string text = "Cipher me please OwO";
-    string cipher = caesar.Cipher(text, -5);
+    string cipher = caesar.Cipher(text, customCipherKey);
 
     cout << "[>] Original text: " << text << endl;
-    cout << " |-<*> Ciphered text: " << cipher << endl;
+    cout << "[<] Ciphered text: " << cipher << endl;
 
-    cout << " |-<*> Deciphered text: ";
-    cout << caesar.Decipher(cipher, -5) << endl;
+    cout << "[<] Deciphered text: ";
+    cout << caesar.Decipher(cipher, customCipherKey) << endl;
 
-    cout << " |-<?> Is standard cipher key used: ";
+    cout << "[<] Is standard cipher key used: ";
     cout << caesar.IsDecipherable(text, cipher) << endl;
 
-    cout << " |-<*> Cipher key used: ";
+    cout << "[<] Cipher key used: ";
     cout << caesar.GetCipherKey(text, cipher) << endl;
 }
 
