@@ -11,16 +11,16 @@ class Caesar
         int StandardKey;
 
     public:
-        Caesar(int cypherKey_ = 2)
-            : StandardKey(cypherKey_)
+        Caesar(int cipherKey_ = 2)
+            : StandardKey(cipherKey_)
         {};
         ~Caesar() {};
 
-        string Cypher(string decipheredText);
-        string Cypher(string decipheredText, int cypherKey /*= 2*/);
+        string Cipher(string decipheredText);
+        string Cipher(string decipheredText, int cipherKey);
         string Decipher(string cipheredText);
-        string Decipher(string cipheredText, int cypherKey /*= 2*/);
+        string Decipher(string cipheredText, int cipherKey);
 
         bool IsDecipherable(string decipheredText, string cipheredText);
-        int GetCypherKey(string decipheredText, string cipheredText);
+        int GetCipherKey(string decipheredText, string cipheredText);
 };
