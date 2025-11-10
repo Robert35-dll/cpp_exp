@@ -16,7 +16,7 @@ string Caesar::Cipher(string decipheredText)
  * @brief Encrypts the given text according to
  *        Caesar's cipher algorithm.
  * @param decipheredText: The text to cipher.
- * @param cipherKey: The amount of chars (in ACII/UTF order)
+ * @param cipherKey: The amount of chars (in ASCII/UTF order)
  *                   to shift the encrypted text for.
  * @retval The encrypted text as a `string`.
  */
@@ -91,7 +91,7 @@ bool Caesar::IsDecipherable(string decipheredText, string cipheredText)
  * @brief Searches for an encryption key in range of 1000 + 1
  *        used by Caesar's cipher algorithm applied to the given texts.
  * @note If any of the texts is an empty string, 0 is returned.
- * @param decipheredText: The originak text.
+ * @param decipheredText: The original text.
  * @param cipheredText: An encryption of the original text.
  * @retval The amount of chars (in ASCII/UTF order) used
  *         to encrypt the original text as `int` or `0`,

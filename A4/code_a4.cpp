@@ -125,15 +125,15 @@ void TestRectangles()
     cin >> x >> y;
     B.set(x, y);
     
-    cout << "\n |" << endl;
+    cout << " |" << endl;
     Rechteck RE(A, B);
 
     cout << "[<] Die Rechteckflaeche betraegt: ";
-    cout << RE.Flaeche();
+    cout << RE.Flaeche() << endl;
 
     double dUmfang = RE.Umfang();
     cout << "[<] Der Umfang des Rechteckes betraegt: ";
-    cout << dUmfang;
+    cout << dUmfang << endl;
 
     unsigned int uiUmfang = RE.Umfang(true);
     cout << "[<] Der gerundete Umfang des Rechteckes in Inches betraegt: ";
