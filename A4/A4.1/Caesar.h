@@ -1,7 +1,5 @@
 #pragma once
-#ifndef string
 #include <string>
-#endif
 
 using namespace std;
 
