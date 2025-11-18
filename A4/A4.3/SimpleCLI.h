@@ -25,9 +25,6 @@ class SimpleCLI
 
         bool IsValidChoice(int choice);
 
-        void LogWarning(string description, bool isCritical = false);
-        void LogError(string description, bool isCritical = false);
-
     public:
         SimpleCLI()
         {
@@ -49,4 +46,15 @@ class SimpleCLI
         void RemoveOption(string option);
         void RemoveOption(int index = -1);
         void ClearOptions();
+
+        void LogMessage(string description,
+                        bool hasLineBreak = true,
+                        bool isUrgent = false);
+        void LogWarning(string description,
+                        bool hasLineBreak = true,
+                        bool isUrgent = false);
+        void LogError(string description,
+                        bool hasLineBreak = true,
+                        bool isUrgent = false);
 };
+// g++ -g code_a4.cpp ./A4.1/Caesar.cpp ./A4.1/Caesar.h ./A4.3/SIMcard.cpp ./A4.3/SIMcard.h ./A4.3/SimpleCLI.cpp ./A4.3/SimpleCLI.h -o code_a4.exe

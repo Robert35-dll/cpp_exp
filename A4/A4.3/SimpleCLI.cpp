@@ -18,34 +18,6 @@ bool SimpleCLI::IsValidChoice(int choice)
 }
 
 /**
- * @brief Wraps and outputs a message as a warning.
- * @param description: The text of a message to display.
- * @param isCritical: Whether to use special mark for the output.
- */
-void SimpleCLI::LogWarning(string description, bool isCritical /*= false*/)
-{
-    string indicator = isCritical
-        ? WarningIndicator
-        : ExecutionWarning;
-
-    cout << indicator << " " << description << endl;
-}
-
-/**
- * @brief Wraps and outputs a message as an error.
- * @param description: The text of a message to display.
- * @param isCritical: Whether to use special mark for the output.
- */
-void SimpleCLI::LogError(string description, bool isCritical /*= false*/)
-{
-    string indicator = isCritical
-        ? ErrorIndicator
-        : ExecutionError;
-
-    cout << indicator << " " << description << endl;
-}
-
-/**
  * @brief Asks for input of a certain menu option.
  * @note This displays all available options and keeps asking
  *       until a valid one is provided.
@@ -56,22 +28,25 @@ int SimpleCLI::GetOptionChoice()
     int choice = 0;
     while (true)
     {
-        cout << "Choose an option:" << endl;
+        LogWarning("Choose an option", true, true);
+
         for (size_t i = 0; i < MenuOptions.size(); i++)
         {
             cout << "[" << i + 1 << "] - " << MenuOptions[i] << endl;
         }
+        cout << "[-1] - Exit the program" << endl;
+        cout << LineIndicator << endl;
     
-        choice = GetIntInput("Enter a respective number:");
+        choice = GetIntInput("Enter a respective number", true);
 
         if (choice == -1 || IsValidChoice(choice - 1))
         {
             break;
         }
 
-        LogError("Please enter a valid option from the list >:(");
-        cout << LineIndicator << endl;
+        LogError("Please enter a valid option from the list >:(", true);
     }
+    cout << LineIndicator << endl;
 
     return choice;
 }
@@ -81,7 +56,7 @@ int SimpleCLI::GetOptionChoice()
  * @note This function keeps asking for input until a convertible string
  *       is provided.
  * @param requestLine: The line to request an input with.
- * @param isSigned: Whether the number has to be positive or not.
+ * @param isSigned: Whether the number can be negative or not.
  * @retval An `int` number provided by user.
  */
 int SimpleCLI::GetIntInput(string requestLine, bool isSigned /*= false*/)
@@ -92,7 +67,7 @@ int SimpleCLI::GetIntInput(string requestLine, bool isSigned /*= false*/)
 
     while (true) {
         // Asking for input
-        cout << "[>] " << requestLine << ": ";
+        cout << InputIndicator << " " << requestLine << ": ";
         cin >> rawInput;
 
         // Trying to convert the input to int,
@@ -104,10 +79,10 @@ int SimpleCLI::GetIntInput(string requestLine, bool isSigned /*= false*/)
                 throw range_error("Please enter a positive number.");
             }
         } catch (invalid_argument) {
-            cout << "[!] Please enter a number!\n |" << endl;
+            LogError("Please enter a number!", true);
             continue;
         } catch (range_error) {
-            cout << "[!] Please enter a positive number!\n |" << endl;
+            LogError("Please enter a positive number!", true);
             continue;
         }
 
@@ -131,7 +106,7 @@ string SimpleCLI::GetStringInput(string requestLine)
 
     while (true) {
         // Asking for input
-        cout << "[>] " << requestLine << ": ";
+        cout << InputIndicator << " " << requestLine << ": ";
         cin >> rawInput;
 
         // Validating the string,
@@ -141,7 +116,7 @@ string SimpleCLI::GetStringInput(string requestLine)
             break;
         }
 
-        cout << "[!] Invalid input! Please try again.\n |" << endl;
+        LogError("Invalid input! Please try again.", true);
     }
 
     return rawInput;
@@ -234,4 +209,68 @@ void SimpleCLI::RemoveOption(int index /*= -1*/)
 void SimpleCLI::ClearOptions()
 {
     MenuOptions.clear();
+}
+
+/**
+ * @brief Formats and outputs a message.
+ * @param description: The text of a message to display.
+ * @param hasBlankLine: Whether to put a blank line under the message.
+ * @param isUrgent: Whether to use special mark for the output.
+ */
+void SimpleCLI::LogMessage(string description,
+                           bool hasBlankLine /*= false*/,
+                           bool isUrgent /*= false*/)
+{
+    string indicator = isUrgent
+        ? OutputIndicator
+        : ExecutionDebug;
+
+    cout << indicator << " " << description << endl;
+    if (hasBlankLine)
+    {
+        cout << LineIndicator << endl;
+    }
+}
+
+/**
+ * @brief Formats and outputs a message as a warning.
+ * @param description: The text of a message to display.
+ * @param hasBlankLine: Whether to put a blank line under the message.
+ * @param isUrgent: Whether to use special mark for the output.
+ */
+void SimpleCLI::LogWarning(string description,
+                           bool hasBlankLine /*= false*/,
+                           bool isUrgent /*= false*/)
+{
+    string indicator = isUrgent
+        ? WarningIndicator
+        : ExecutionWarning;
+
+    cout << indicator << " " << description << endl;
+    if (hasBlankLine)
+    {
+        cout << LineIndicator << endl;
+    }
+
+}
+
+/**
+ * @brief Formats and outputs a message as an error.
+ * @param description: The text of a message to display.
+ * @param hasBlankLine: Whether to put a blank line under the message.
+ * @param isUrgent: Whether to use special mark for the output.
+ */
+void SimpleCLI::LogError(string description,
+                         bool hasBlankLine /*= false*/,
+                         bool isUrgent /*= false*/)
+{
+    string indicator = isUrgent
+        ? ErrorIndicator
+        : ExecutionError;
+
+    cout << indicator << " " << description << endl;
+    if (hasBlankLine)
+    {
+        cout << LineIndicator << endl;
+    }
 }
