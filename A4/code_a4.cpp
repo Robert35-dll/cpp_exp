@@ -1,5 +1,6 @@
 #include "./A4.1/Caesar.h"
 #include "./A4.3/SIMcard.h"
+#include "./A4.3/SimpleCLI.h"
 
 #include <cmath>
 #include <iostream>
@@ -14,6 +15,12 @@ void TestCaesarCiphering();
 // A4.2 Functions
 void TestRectangles();
 
+// A4.3 Functions
+void ManageSIMcard();
+SIMcard CreateSIMcard(SimpleCLI);
+void AddContact(SimpleCLI, SIMcard);
+void SearchContact(SimpleCLI, SIMcard);
+
 int main()
 {
     // A4.1
@@ -25,6 +32,9 @@ int main()
     cout << "[*] A4.2\n |" << endl;
     TestRectangles();
     cout << " |" << endl;
+
+    // A4.3
+    ManageSIMcard();
 
     return 1;
 }
@@ -142,5 +152,134 @@ void TestRectangles()
 
 #pragma endregion [A4.2]
 #pragma region [A4.3]
+
+/**
+ * @brief Creates and manages a simple SIMcard object.
+ */
+void ManageSIMcard()
+{
+    vector<string> menuOptions = { "Create a SIMcard" };
+    SimpleCLI cli = SimpleCLI(menuOptions);
+
+    // The option is guaranteed to be 1 at this point :)
+    int option = cli.GetOptionChoice();
+    SIMcard simCard = CreateSIMcard(cli);
+
+    menuOptions =
+    {
+        "Add Contact",
+        "Search Contact number by name"
+    };
+    cli.SetOptions(menuOptions);
+
+    while (option != -1)
+    {
+        option = cli.GetOptionChoice();
+
+        switch (option)
+        {
+            case 1:
+            {
+                AddContact(cli, simCard);
+                break;
+            }
+            case 2:
+            {
+                //! For some reason no contacts are present !
+                SearchContact(cli, simCard);
+                break;
+            }
+        }
+    }
+
+    cli.LogMessage("Finishing the program...", false, true);
+}
+
+/**
+ * @brief Creates a SIMcard object.
+ * @note The SIMcard has to have a 4 digit PIN.
+ * @param cli: A ClI tool to retrieve inputs and give outputs by.
+ * @retval A new `SIMcard` object.
+ */
+SIMcard CreateSIMcard(SimpleCLI cli)
+{
+    cli.LogWarning("Creating a new SIMcard...", false, true);
+    
+    int pin = 0;
+    
+    while (pin == 0)
+    {
+        pin = cli.GetIntInput("Enter a 4 digit PIN of your new SIMcard");
+        if (pin % 10000 < 1000 || pin > 9999)
+        {
+            cli.LogError("The PIN must be a 4 digit number!", true, true);
+            pin = 0;
+        }
+    }
+
+    SIMcard newCard = SIMcard(pin);
+    cli.LogMessage("Successfully created SIMcard :D", true);
+
+    return newCard;
+}
+
+/**
+ * @brief Adds a contact to the given SIMcard.
+ * @param cli: A ClI tool to retrieve inputs and give outputs by.
+ * @param card: The card to add a contact to.
+ */
+void AddContact(SimpleCLI cli, SIMcard card)
+{
+    cli.LogWarning("Adding new contact...", false, true);
+
+    string contactName = cli.GetStringInput("Enter contact's name");
+    int contactNumber = cli.GetIntInput("Enter contact's number");
+    int pin = cli.GetIntInput("Enter the PIN of your card");
+
+    bool result = card.trageEin(contactName, contactNumber, pin);
+    if (!result)
+    {
+        cli.LogError("Incorrect PIN. Please try again.", true, true);
+    }
+    else
+    {
+        cli.LogMessage("Successfully added new contact :D", true);
+    }
+}
+
+/**
+ * @brief Searches a certain contact in the list of the given SIMcard.
+ * @param cli: A ClI tool to retrieve inputs and give outputs by.
+ * @param card: The card to search the contact of.
+ */
+void SearchContact(SimpleCLI cli, SIMcard card)
+{
+    string contactName = cli.GetStringInput("Enter contact's name");
+    int pin = cli.GetIntInput("Enter the PIN of your card");
+
+    string output;
+    int result = card.sucheNummer(contactName, pin);
+    switch (result)
+    {
+        case -1:
+        {
+            output = "Incorrect PIN. Please try again.";
+            cli.LogError(output, true, true);
+            break;
+        }
+        case 0:
+        {
+            output = "No contact with the name " + contactName + " was found :(";
+            cli.LogWarning(output);
+            break;
+        }
+        default:
+        {
+            output = "The " + contactName + "'s number is " + to_string(result);
+            cli.LogMessage(output);
+            break;
+        }
+    }
+}
 
 #pragma endregion [A4.3]
