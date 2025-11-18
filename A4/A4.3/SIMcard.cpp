@@ -39,8 +39,10 @@ int SIMcard::sucheNummer(string name_, unsigned int pin_)
         return -1;
     }
 
-    for (Eintrag e : Telefonbuch)
+    Eintrag e;
+    for (size_t i = 0; i < Telefonbuch.size(); i++)
     {
+        e = Telefonbuch.at(i);
         if (e.name == name_)
         {
             return e.nummer;
