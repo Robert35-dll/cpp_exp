@@ -57,4 +57,3 @@ class SimpleCLI
                         bool hasLineBreak = true,
                         bool isUrgent = false);
 };
-// g++ -g code_a4.cpp ./A4.1/Caesar.cpp ./A4.1/Caesar.h ./A4.3/SIMcard.cpp ./A4.3/SIMcard.h ./A4.3/SimpleCLI.cpp ./A4.3/SimpleCLI.h -o code_a4.exe
