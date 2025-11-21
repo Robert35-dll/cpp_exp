@@ -5,7 +5,7 @@ Here are some basic notes about usage of arrays, containers and structs in C++.
 ## C-native Structures
 
 These structures are quite low-level options of common ones used in other languages.
-Use them, if you're sure what you're doing. Otherwise go to [C-Structures](#c-structures).
+Use them, if you're sure what you're doing. Otherwise go to [C++-Structures](#c-structures).
 
 ### C-Arrays
 
