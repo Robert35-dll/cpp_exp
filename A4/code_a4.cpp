@@ -18,8 +18,8 @@ void TestRectangles();
 // A4.3 Functions
 void ManageSIMcard();
 SIMcard CreateSIMcard(SimpleCLI);
-void AddContact(SimpleCLI, SIMcard);
-void SearchContact(SimpleCLI, SIMcard);
+SIMcard AddContact(SimpleCLI, SIMcard);
+SIMcard SearchContact(SimpleCLI, SIMcard);
 
 int main()
 {
@@ -180,13 +180,12 @@ void ManageSIMcard()
         {
             case 1:
             {
-                AddContact(cli, simCard);
+                simCard = AddContact(cli, simCard);
                 break;
             }
             case 2:
             {
-                //! For some reason no contacts are present !
-                SearchContact(cli, simCard);
+                simCard = SearchContact(cli, simCard);
                 break;
             }
         }
@@ -227,8 +226,9 @@ SIMcard CreateSIMcard(SimpleCLI cli)
  * @brief Adds a contact to the given SIMcard.
  * @param cli: A ClI tool to retrieve inputs and give outputs by.
  * @param card: The card to add a contact to.
+ * @retval The updated `SIMcard` object.
  */
-void AddContact(SimpleCLI cli, SIMcard card)
+SIMcard AddContact(SimpleCLI cli, SIMcard card)
 {
     cli.LogWarning("Adding new contact...", false, true);
 
@@ -237,7 +237,11 @@ void AddContact(SimpleCLI cli, SIMcard card)
     int pin = cli.GetIntInput("Enter the PIN of your card");
 
     bool result = card.trageEin(contactName, contactNumber, pin);
-    if (!result)
+    if (!result && contactNumber == 0)
+    {
+        cli.LogError("The contact's number cannot be 0.", true, true);
+    }
+    else if (!result)
     {
         cli.LogError("Incorrect PIN. Please try again.", true, true);
     }
@@ -245,14 +249,17 @@ void AddContact(SimpleCLI cli, SIMcard card)
     {
         cli.LogMessage("Successfully added new contact :D", true);
     }
+
+    return card;
 }
 
 /**
  * @brief Searches a certain contact in the list of the given SIMcard.
  * @param cli: A ClI tool to retrieve inputs and give outputs by.
  * @param card: The card to search the contact of.
+ * @retval The updated `SIMcard` object.
  */
-void SearchContact(SimpleCLI cli, SIMcard card)
+SIMcard SearchContact(SimpleCLI cli, SIMcard card)
 {
     string contactName = cli.GetStringInput("Enter contact's name");
     int pin = cli.GetIntInput("Enter the PIN of your card");
@@ -280,6 +287,8 @@ void SearchContact(SimpleCLI cli, SIMcard card)
             break;
         }
     }
+
+    return card;
 }
 
 #pragma endregion [A4.3]

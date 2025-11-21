@@ -10,7 +10,7 @@
  */
 bool SIMcard::trageEin(string name_, int nummer_, unsigned int pin_)
 {
-    if (pin_ != PIN)
+    if (pin_ != PIN || nummer_ == 0)
     {
         return false;
     }
