@@ -215,9 +215,60 @@ void C::IncClassCount()
 
 ## Stack vs Heap
 
-cSen Device1; // Definition in Stack
-cSen Device1 = new cSen() // Definition in Heap
+This topic is meant to be covered in further updates but since it directly touches instantiation of classes it is noticeable here as well.
+
+There're two types of memory space you can use to store and operate your variables:
+
+- Stack - for short-term or function execution's data (_generally limited but fast_)
+- Heap - for long-term and program-shared data (_potentially unlimited but slow_)
+
+Another significant difference between both types is the allocation process.
+Stack memory is allocated automatically by the program while heap memory has to be operated manually (_e.g. allocating and freeing memory space_).
+
+In order to define the type of memory space for a certain object you can write the following:
+
+```c++
+#include "C.h"
+
+int main()
+{
+    // Creating an object in stack memory of main()
+    C stackC = C();
+
+    // Creating an object in heap memory
+    C *heapC = new C();
+
+    // At the end all defined object will be destroyed automatically 
+    return 1;
+}
+```
 
 ### Destructor Method
 
-~cSen() // At deletion of an object, also in .h files possible
+Even though object will be destroyed automatically at the end of a program this doesn't include its internal objects allocated to heap.
+Therefore you have to implement a custom destructor and free used memory manually like:
+
+```c++
+#pragma once
+
+class C
+{
+    private:
+        int Count;
+        int* pCount;
+
+    public:
+        // Constructor
+        C(int count_)
+            : Count(count_)
+        {
+            pCount = new int;
+            *pCount = Count;
+        }
+        // Destructor
+        ~C()
+        {
+            delete pCount;
+        }
+}
+```
