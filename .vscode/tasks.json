@@ -27,7 +27,7 @@
             "args": [
                 "-fdiagnostics-color=always",
                 "-g",
-                "*.cpp",
+                "*/** *.cpp",
                 "-o",
                 "${fileDirname}/${fileBasenameNoExtension}"
             ],
