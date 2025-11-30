@@ -35,7 +35,7 @@ int main()
     // A5.3
     cout << "[*] A5.3\n |" << endl;
     SolveQuadraticEquation();
-    cout << " |" << endl;
+    cout << "[^]" << endl;
 
     return 0;
 }
@@ -125,9 +125,9 @@ void PrintArray(int *arr, int arrLength)
 
 void SolveQuadraticEquation()
 {
-    float a = 1;
-    float b = 1;
-    float c = -1;
+    float a = 3;
+    float b = -2;
+    float c = 1;
 
     float coeffs[] = {a, b, c};
     PrintPolynom(coeffs, 3);
@@ -135,20 +135,40 @@ void SolveQuadraticEquation()
     float x1 = 0.0;
     float x2 = 0.0;
 
-    RootSquad(a, b, c, &x1, &x2);
-
-    cout << "[<] Equation roots: " << x1 << "; " << x2 << endl;
+    cout << "[<] Equation roots:" << endl;
+    
+    bool hasRealSolution = RootSquad(a, b, c, &x1, &x2);
+    if (hasRealSolution)
+    {
+        cout << " |-< " << x1 << endl;
+        cout << " |-< " << x2 << endl;
+    }
+    else
+    {
+        cout << " |-< " << x1 << " - " << x2 << "i" << endl;
+        cout << " |-< " << x1 << " + " << x2 << "i" << endl;
+    }
 }
 
 bool RootSquad(float a_IN, float b_IN, float c_IN, float *d_OUT, float *e_OUT)
 {
     float disc = b_IN * b_IN - 4 * a_IN * c_IN;
+    float discrSqrt;
+
+    // If distance between roots is negative ->
+    // calculate imaginary coefficients
     if (disc < 0)
     {
+        discrSqrt = sqrt(-disc);
+
+        *d_OUT = -b_IN     / (2 * a_IN);
+        *e_OUT = discrSqrt / (2 * a_IN);
+
         return false;
     }
 
-    float discrSqrt = sqrt(disc);
+    // Otherwise -> calculate real coefficients
+    discrSqrt = sqrt(disc);
 
     *d_OUT = (-b_IN - discrSqrt) / (2 * a_IN);
     *e_OUT = (-b_IN + discrSqrt) / (2 * a_IN);
@@ -193,7 +213,7 @@ void PrintPolynom(float *coeffs, int coeffs_amount)
         cout << " ";
         isFirstCoeff = false;
     }
-    cout << endl;
+    cout << " = 0" << endl;
 }
 
 void PrintCoefficient(float coeff, bool isFirst)
