@@ -139,7 +139,11 @@ void FillArray(int *arrStart, int arrSize, int min = 0, int max = 1)
  */
 void PrintArray(int *arrStart, int *arrEnd)
 {
-    //* Note: In pointer arithmetic - int = 4 bytes (typically on x64 OS)
+    //* Note: int    = 4 bytes
+    //*       int*   = 8 bytes (typically on x64 OS)
+    //*
+    //*       int++  = +1
+    //*       int*++ = +0x000004 (+4 bytes for int specifically)
     for (int *i = arrStart; i != arrEnd + 1; i++)
     {
         cout << "[" << i - arrStart  + 1 << "]-< " << *i;
