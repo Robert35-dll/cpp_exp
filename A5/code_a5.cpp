@@ -17,6 +17,8 @@ void PrintArray(int*, int);
 // A5.3 Functions
 void SolveQuadraticEquation();
 bool RootSquad(float, float, float, float*, float*);
+void PrintPolynom(float *, int);
+void PrintCoefficient(float, bool);
 
 int main()
 {
@@ -127,7 +129,8 @@ void SolveQuadraticEquation()
     float b = 1;
     float c = -1;
 
-    cout << "[>] Equation: " << a << "x^2 + (" << b << ")x + (" << c << ")" << endl;
+    float coeffs[] = {a, b, c};
+    PrintPolynom(coeffs, 3);
 
     float x1 = 0.0;
     float x2 = 0.0;
@@ -151,6 +154,64 @@ bool RootSquad(float a_IN, float b_IN, float c_IN, float *d_OUT, float *e_OUT)
     *e_OUT = (-b_IN + discrSqrt) / (2 * a_IN);
 
     return true;
+}
+
+void PrintPolynom(float *coeffs, int coeffs_amount)
+{
+    cout << "[>] Equation: ";
+
+    // A flag to notice the start of printing
+    bool isFirstCoeff = true;
+
+    for (int i = 0; i < coeffs_amount; i++)
+    {
+        // If coefficient is 0 -> don't print anything
+        if (coeffs[i] == 0)
+        {
+            continue;
+        }
+
+        // For any other coefficient:
+        // Step 1 - Print coefficients with their signs separately
+        PrintCoefficient(coeffs[i], isFirstCoeff);
+
+        // Step 2 - If a coefficient isn't the last one -> print the x sign
+        if (i == coeffs_amount - 1)
+        {
+            break;
+        }
+
+        cout << "x";
+
+        // Step 3 - If a coefficient isn't the last or the second last ->
+        // print the power
+        if (i < coeffs_amount - 2)
+        {
+            cout << "^" << coeffs_amount - 1 - i;
+        }
+
+        cout << " ";
+        isFirstCoeff = false;
+    }
+    cout << endl;
+}
+
+void PrintCoefficient(float coeff, bool isFirst)
+{
+    if (isFirst)
+    {
+        cout << coeff;
+        return;
+    }
+
+    if (coeff > 0)
+    {
+        cout << "+ " << coeff;
+    }
+    else
+    {
+        cout << "- " << -coeff;
+    }
 }
 
 #pragma endregion [A5.3]
