@@ -123,6 +123,47 @@ string SimpleCLI::GetStringInput(string requestLine)
 }
 
 /**
+ * @brief Retrieves a `float` number from the user.
+ * @note This function keeps asking for input until a convertible string
+ *       is provided.
+ * @param requestLine: The line to request an input with.
+ * @param isSigned: Whether the number can be negative or not.
+ * @retval A `float` number provided by user.
+ */
+float SimpleCLI::GetFloatInput(string requestLine, bool isSigned /*= false*/)
+{
+    // Defining required input variables
+    string rawInput;
+    float numberInput;
+
+    while (true) {
+        // Asking for input
+        cout << InputIndicator << " " << requestLine << ": ";
+        cin >> rawInput;
+
+        // Trying to convert the input to float,
+        // if succeeded -> break the loop,
+        // if failed -> skip the iteration
+        try {
+            numberInput = stof(rawInput);
+            if (!isSigned && numberInput < 0) {
+                throw range_error("Please enter a positive number.");
+            }
+        } catch (invalid_argument) {
+            LogError("Please enter a number!", true);
+            continue;
+        } catch (range_error) {
+            LogError("Please enter a positive number!", true);
+            continue;
+        }
+
+        break;
+    }
+
+    return numberInput;
+}
+
+/**
  * @brief Adds an option to the menu.
  * @note If provided index is out of menu's range,
  *       no option will be added.
