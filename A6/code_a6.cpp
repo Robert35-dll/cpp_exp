@@ -15,6 +15,7 @@ float Devide(float, float);
 
 int main()
 {
+    // Creating a CLI tool for custom I/O
     SimpleCLI* const cli = new SimpleCLI();
 
     // A6.1
@@ -83,21 +84,47 @@ void TestFunctionPointer(SimpleCLI* const cli)
     cli->LogMessage("Result: " + to_string(result), false, true);
 }
 
+/**
+ * @brief Adds to decimal numbers together.
+ * @param a: The first number.
+ * @param b: The second number.
+ * @retval The sum of given numbers.
+ */
 float Add(float a, float b)
 {
     return a + b;
 }
 
+/**
+ * @brief Substracts one decimal number from another.
+ * @param a: The number to substract from.
+ * @param b: The number to substract by.
+ * @retval The difference between given numbers.
+ */
 float Substract(float a, float b)
 {
     return a - b;
 }
 
+/**
+ * @brief Multiplies to decimal numbers together.
+ * @param a: The first number.
+ * @param b: The second number.
+ * @retval The product of given numbers.
+ */
 float Multiply(float a, float b)
 {
     return a * b;
 }
 
+/**
+ * @brief Devides one decimal number by another.
+ * @note If the second number is zero,
+ * an `inf` value is returned instead.
+ * @param a: The number to devide.
+ * @param b: The number to devide by (first quotient).
+ * @retval The second quotient of given first number.
+ */
 float Devide(float a, float b)
 {
     return b != 0
