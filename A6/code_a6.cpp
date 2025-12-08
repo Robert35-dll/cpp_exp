@@ -149,26 +149,56 @@ float Devide(float a, float b)
 
 void TestSmartPointers(SimpleCLI* const cli)
 {
-    cli->LogMessage("Checking single shared pointer:", false, true);
+    cli->LogMessage("Checking shared pointers:", false, true);
+    // Initializing a test value
     int *heapInt = new int(1);
-    shared_ptr<int> sp1 = shared_ptr<int>(heapInt);
-    bool spResult = CheckPointer(0, sp1, cli);
-    
-    cli->LogMessage("Checking multiple shared pointers:", false, true);
-    shared_ptr<int> sp2 = shared_ptr<int>(new int(1));
-    shared_ptr<int> sp3 = sp2;
-    spResult = CheckPointer(0, sp2, cli);
 
-    cli->LogMessage("Checking unique pointer:", false, true);
-    unique_ptr<int> up1 = unique_ptr<int>(new int(2));
+    // Creating the first shared_ptr
+    shared_ptr<int> sp1 = make_shared<int>();
+    sp1.reset(heapInt);
+
+    // Creating the second shared_ptr bound to the same test value
+    shared_ptr<int> sp2(sp1);
+
+    // Creating another separate shared_ptr with the same value
+    //*Note: This implies creating a complete separate variable/object 
+    shared_ptr<int> sp3 = make_shared<int>(*heapInt);
+
+    // Modifying the test value
+    //*Note: This should be visible by dereferencing two first shared pointers 
+    *heapInt = 2;
+    
+    // Logging all three shared pointers
+    cli->LogMessage("\b1st> Shared Pointer:", false);
+    bool spResult = CheckPointer(0, sp1, cli);
+    cli->LogMessage("\b2nd> Shared Pointer:", false);
+    spResult = CheckPointer(0, sp2, cli);
+    cli->LogMessage("\b3rd> Shared Pointer:", false);
+    spResult = CheckPointer(0, sp3, cli);
+
+    cli->LogMessage("Checking unique pointers:", false, true);
+    // Creating two unique pointers and assigning values to them
+    unique_ptr<int> up1 = unique_ptr<int>(new int(0));
     unique_ptr<int> up2;
     up1.swap(up2);
-    bool upResult = CheckPointer(0, up2, cli);
 
+    // Logging both unique pointers
+    cli->LogMessage("\b1st> Unique Pointer:", false);
+    bool upResult = CheckPointer(0, up1, cli);
+    cli->LogMessage("\b2nd> Unique Pointer:", false);
+    upResult = CheckPointer(0, up2, cli);
+    
     cli->LogMessage("Checking weak pointers:", false, true);
-    weak_ptr<int> wp1 = weak_ptr<int>(sp2);
+    // Creating the first weak_ptr to the first shared_ptr (value = 2)
+    weak_ptr<int> wp1 = weak_ptr<int>(sp1);
+    
+    // Creating the second weak_ptr to the third shared_ptr (value = 1)
+    weak_ptr<int> wp2 = weak_ptr<int>(sp3);
+    
+    // Logging both weak pointers
+    cli->LogMessage("\b1st> Weak Pointer:", false);
     bool wpResult = CheckPointer(0, wp1, cli);
-    weak_ptr<int> wp2 = weak_ptr<int>(sp2);
+    cli->LogMessage("\b2nd> Weak Pointer:", false);
     wpResult = CheckPointer(0, wp2, cli);
 }
 
