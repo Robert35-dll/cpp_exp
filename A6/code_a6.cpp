@@ -12,7 +12,7 @@ void TestFunctionPointer(SimpleCLI* const);
 float Add(float, float);
 float Substract(float, float);
 float Multiply(float, float);
-float Devide(float, float);
+float Divide(float, float);
 
 // A6.2 Functions
 void TestSmartPointers(SimpleCLI* const);
@@ -42,7 +42,7 @@ int main()
 #pragma region [A6.1]
 
 /**
- * @brief Demonastrates usage of a function pointer.
+ * @brief Demonstrates usage of a function pointer.
  * @param cli: A CLI-Tool to retrieve user inputs.
  */
 void TestFunctionPointer(SimpleCLI* const cli)
@@ -51,7 +51,7 @@ void TestFunctionPointer(SimpleCLI* const cli)
         "Add",
         "Substract",
         "Multiply",
-        "Devide"
+        "Divide"
     };
     cli->SetOptions(options);
 
@@ -78,7 +78,7 @@ void TestFunctionPointer(SimpleCLI* const cli)
         }
         case 4:
         {
-            operationFunc = Devide;
+            operationFunc = Divide;
             break;
         }
         default:
@@ -130,14 +130,14 @@ float Multiply(float a, float b)
 }
 
 /**
- * @brief Devides one decimal number by another.
+ * @brief Divides one decimal number by another.
  * @note If the second number is zero,
  * an `inf` value is returned instead.
- * @param a: The number to devide.
- * @param b: The number to devide by (first quotient).
+ * @param a: The number to divide.
+ * @param b: The number to divide by (first quotient).
  * @retval The second quotient of given first number.
  */
-float Devide(float a, float b)
+float Divide(float a, float b)
 {
     return b != 0
         ? a / b
