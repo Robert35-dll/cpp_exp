@@ -16,9 +16,9 @@ float Devide(float, float);
 
 // A6.2 Functions
 void TestSmartPointers(SimpleCLI* const);
-bool CheckPointer(int, const shared_ptr<int>&, SimpleCLI* const);
-bool CheckPointer(int, const unique_ptr<int>&, SimpleCLI* const);
-bool CheckPointer(int, const weak_ptr<int>&, SimpleCLI* const);
+bool CheckPointer(const shared_ptr<int>&, SimpleCLI* const, int = 0);
+bool CheckPointer(const unique_ptr<int>&, SimpleCLI* const, int = 0);
+bool CheckPointer(const weak_ptr<int>&, SimpleCLI* const, int = 0);
 
 int main()
 {
@@ -31,7 +31,7 @@ int main()
     // cout << " |" << endl;
     
     // A6.1
-    cout << "[*] A6.1\n |" << endl;
+    cout << "[*] A6.2\n |" << endl;
     TestSmartPointers(cli);
     cout << " |" << endl;
 
@@ -170,11 +170,11 @@ void TestSmartPointers(SimpleCLI* const cli)
     
     // Logging all three shared pointers
     cli->LogMessage("\b1st> Shared Pointer:", false);
-    bool spResult = CheckPointer(0, sp1, cli);
+    bool spResult = CheckPointer(sp1, cli);
     cli->LogMessage("\b2nd> Shared Pointer:", false);
-    spResult = CheckPointer(0, sp2, cli);
+    spResult = CheckPointer(sp2, cli);
     cli->LogMessage("\b3rd> Shared Pointer:", false);
-    spResult = CheckPointer(0, sp3, cli);
+    spResult = CheckPointer(sp3, cli);
 
     cli->LogMessage("Checking unique pointers:", false, true);
     // Creating two unique pointers and assigning values to them
@@ -184,9 +184,9 @@ void TestSmartPointers(SimpleCLI* const cli)
 
     // Logging both unique pointers
     cli->LogMessage("\b1st> Unique Pointer:", false);
-    bool upResult = CheckPointer(0, up1, cli);
+    bool upResult = CheckPointer(up1, cli);
     cli->LogMessage("\b2nd> Unique Pointer:", false);
-    upResult = CheckPointer(0, up2, cli);
+    upResult = CheckPointer(up2, cli);
     
     cli->LogMessage("Checking weak pointers:", false, true);
     // Creating the first weak_ptr to the first shared_ptr (value = 2)
@@ -197,12 +197,14 @@ void TestSmartPointers(SimpleCLI* const cli)
     
     // Logging both weak pointers
     cli->LogMessage("\b1st> Weak Pointer:", false);
-    bool wpResult = CheckPointer(0, wp1, cli);
+    bool wpResult = CheckPointer(wp1, cli, 1);
     cli->LogMessage("\b2nd> Weak Pointer:", false);
-    wpResult = CheckPointer(0, wp2, cli);
+    wpResult = CheckPointer(wp2, cli, 1);
 }
 
-bool CheckPointer(int count_help, const shared_ptr<int> &p, SimpleCLI* const cli)
+bool CheckPointer(const shared_ptr<int> &p,
+                  SimpleCLI* const cli,
+                  int count_help /*= 0*/)
 {
     if (p == nullptr)
     {
@@ -211,12 +213,15 @@ bool CheckPointer(int count_help, const shared_ptr<int> &p, SimpleCLI* const cli
     }
 
     cli->LogMessage("Shared pointer value: " + to_string(*p), false);
-    cli->LogMessage("Shared pointer references: " + to_string(p.use_count()));
+    cli->LogMessage("Shared pointer references: " +
+                    to_string(p.use_count()));
 
     return true;
 }
 
-bool CheckPointer(int count_help, const unique_ptr<int> &p, SimpleCLI* const cli)
+bool CheckPointer(const unique_ptr<int> &p,
+                  SimpleCLI* const cli,
+                  int count_help /*= 0*/)
 {
     if (p == nullptr)
     {
@@ -230,7 +235,9 @@ bool CheckPointer(int count_help, const unique_ptr<int> &p, SimpleCLI* const cli
     return true;
 }
 
-bool CheckPointer(int count_help, const weak_ptr<int> &p, SimpleCLI* const cli)
+bool CheckPointer(const weak_ptr<int> &p,
+                  SimpleCLI* const cli,
+                  int count_help /*= 0*/)
 {
     if (p.expired())
     {
@@ -239,7 +246,9 @@ bool CheckPointer(int count_help, const weak_ptr<int> &p, SimpleCLI* const cli)
     }
 
     cli->LogMessage("Weak pointer value: " + to_string(*(p.lock())), false);
-    cli->LogMessage("Weak pointer references: " + to_string(p.use_count()));
+    cli->LogMessage("Shared pointer references: " + to_string(p.use_count())
+                    + " (+" + to_string(count_help)
+                    + " weak pointer references)");
 
     return true;
 }
