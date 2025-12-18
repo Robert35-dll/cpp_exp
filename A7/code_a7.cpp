@@ -4,10 +4,26 @@
 
 #include "../A4/A4.3/SimpleCLI.h"
 
+#define Auto pair<string, string>
+#define Driver pair<string, Auto>
+#define AutoPark multimap<Driver>
+
 using namespace std;
 
 // A7.1 Functions
 void RunContactBook(SimpleCLI* const);
+
+// A7.2 Functions
+void RunAutoPark(SimpleCLI* const);
+
+void AddEntry(AutoPark* const, SimpleCLI* const);
+pair<string, Auto> CreateDriver(SimleCLI* const);
+Auto CreateAuto(SimpleCLI* const);
+
+void RemoveDriver(string* const, AutoPark* const);
+
+Auto FindAuto(string* const, AutoPark* const);
+void ListDrivers(AutoPark* const, SimpleCLI* const);
 
 int main()
 {
@@ -16,6 +32,11 @@ int main()
     // A7.1
     cout << "[*] A7.1\n |" << endl;
     RunContactBook(cli);
+    cout << " |" << endl;
+
+    // A7.2
+    cout << "[*] A7.2\n |" << endl;
+    RunAutoPark(cli);
     cout << " |" << endl;
 
     delete cli;
@@ -66,3 +87,17 @@ void RunContactBook(SimpleCLI* const cli)
 }
 
 #pragma endregion [A7.1]
+#pragma region [A7.2]
+
+void RunAutoPark(SimpleCLI* const cli){}
+
+void AddEntry(AutoPark* const park, SimpleCLI* const cli){}
+pair<string, Auto> CreateDriver(SimleCLI* const cli){}
+Auto CreateAuto(SimpleCLI* const cli){}
+
+void RemoveDriver(string* const driverId, AutoPark* const park){}
+
+Auto FindAuto(string* const driverId, AutoPark* const park){}
+void ListDrivers(AutoPark* const park, SimpleCLI* const cli){}
+
+#pragma endregion [A7.2]
