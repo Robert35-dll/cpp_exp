@@ -34,14 +34,14 @@ int main()
     SimpleCLI* const cli = new SimpleCLI();
 
     // A6.1
-    // cout << "[*] A6.1\n |" << endl;
-    // TestFunctionPointer(cli);
-    // cout << " |" << endl;
+    cout << "[*] A6.1\n |" << endl;
+    TestFunctionPointer(cli);
+    cout << " |" << endl;
     
     // A6.2
-    // cout << "[*] A6.2\n |" << endl;
-    // TestSmartPointers(cli);
-    // cout << " |" << endl;
+    cout << "[*] A6.2\n |" << endl;
+    TestSmartPointers(cli);
+    cout << " |" << endl;
 
     // A6.3
     cout << "[*] A6.3\n |" << endl;
@@ -160,6 +160,10 @@ float Divide(float a, float b)
 #pragma endregion [A6.1]
 #pragma region [A6.2]
 
+/**
+ * @brief Demonstrates usage of smart pointers.
+ * @param cli: A CLI-Tool to print outputs.
+ */
 void TestSmartPointers(SimpleCLI* const cli)
 {
     cli->LogMessage("Checking shared pointers:", false, true);
@@ -215,6 +219,13 @@ void TestSmartPointers(SimpleCLI* const cli)
     wpResult = CheckPointer(wp2, cli, 1);
 }
 
+/**
+ * @brief Checks whether a smart pointer is valid or not.
+ * @param p: The shared pointer to check.
+ * @param cli: A CLI-Tool to print outputs.
+ * @param count_help: The number of known weak pointers bound with `p`.
+ * @retval True, if pointer is not a nullpointer. False otherwise.
+ */
 bool CheckPointer(const shared_ptr<int> &p,
                   SimpleCLI* const cli,
                   int count_help /*= 0*/)
@@ -232,6 +243,13 @@ bool CheckPointer(const shared_ptr<int> &p,
     return true;
 }
 
+/**
+ * @brief Checks whether a smart pointer is valid or not.
+ * @param p: The unique to check.
+ * @param cli: A CLI-Tool to print outputs.
+ * @param count_help: The number of known weak pointers bound with `p`.
+ * @retval True, if pointer is not a nullpointer. False otherwise.
+ */
 bool CheckPointer(const unique_ptr<int> &p,
                   SimpleCLI* const cli,
                   int count_help /*= 0*/)
@@ -248,11 +266,18 @@ bool CheckPointer(const unique_ptr<int> &p,
     return true;
 }
 
+/**
+ * @brief Checks whether a smart pointer is valid or not.
+ * @param p: The weak pointer to check.
+ * @param cli: A CLI-Tool to print outputs.
+ * @param count_help: The number of known weak pointers bound with related shared pointer.
+ * @retval True, if pointer is not expired. False otherwise.
+ */
 bool CheckPointer(const weak_ptr<int> &p,
                   SimpleCLI* const cli,
                   int count_help /*= 0*/)
 {
-    if (p.expired())
+    if (p.expired() || p.lock() == nullptr)
     {
         cli->LogError("Invalid weak pointer!");
         return false;
@@ -261,7 +286,8 @@ bool CheckPointer(const weak_ptr<int> &p,
     cli->LogMessage("Weak pointer value: " + to_string(*(p.lock())), false);
     cli->LogMessage("Shared pointer references: " + to_string(p.use_count())
                     + " (+" + to_string(count_help)
-                    + " weak pointer references)");
+                    + " weak pointer references)",
+                    false);
 
     return true;
 }
@@ -269,6 +295,10 @@ bool CheckPointer(const weak_ptr<int> &p,
 #pragma endregion [A6.2]
 #pragma region [A6.3]
 
+/**
+ * @brief Demonstrates basic exception handling.
+ * @param cli: A CLI-Tool to print outputs.
+ */
 void CatchException(SimpleCLI* const cli)
 {
     shared_ptr<int> sp1(new int(1));
@@ -286,10 +316,18 @@ void CatchException(SimpleCLI* const cli)
     {
         cli->LogError("An exception occured during pointer check: "
                       + e,
-                      false, true);
+                      false);
     }
 }
 
+/**
+ * @brief Checks whether a smart pointer is valid or not.
+ * @param p: The weak pointer to check.
+ * @param cli: A CLI-Tool to print outputs.
+ * @param count_help: The number of known weak pointers bound with related shared pointer.
+ * @exception "INVALID_POINTER" as string exception will be thrown, if the pointer is expired
+ *            or a nullptr. 
+ */
 void CheckPointerWithException(const weak_ptr<int> &p,
 	                           SimpleCLI* const cli,
 		                       int count_help /*= 0*/)
