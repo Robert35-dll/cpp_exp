@@ -2,6 +2,8 @@
 #include <vector>
 #include <limits>
 #include <memory>
+#include <string>
+#include <exception>
 #include "../A4/A4.3/SimpleCLI.h"
 
 using namespace std;
@@ -20,6 +22,12 @@ bool CheckPointer(const shared_ptr<int>&, SimpleCLI* const, int = 0);
 bool CheckPointer(const unique_ptr<int>&, SimpleCLI* const, int = 0);
 bool CheckPointer(const weak_ptr<int>&, SimpleCLI* const, int = 0);
 
+// A6.3 Functions
+void CatchException(SimpleCLI* const);
+void CheckPointerWithException(const weak_ptr<int> &p,
+	                           SimpleCLI* const cli,
+		                       int count_help = 0);
+
 int main()
 {
     // Creating a CLI tool for custom I/O
@@ -30,9 +38,14 @@ int main()
     // TestFunctionPointer(cli);
     // cout << " |" << endl;
     
-    // A6.1
-    cout << "[*] A6.2\n |" << endl;
-    TestSmartPointers(cli);
+    // A6.2
+    // cout << "[*] A6.2\n |" << endl;
+    // TestSmartPointers(cli);
+    // cout << " |" << endl;
+
+    // A6.3
+    cout << "[*] A6.3\n |" << endl;
+    CatchException(cli);
     cout << " |" << endl;
 
     delete cli;
@@ -254,3 +267,42 @@ bool CheckPointer(const weak_ptr<int> &p,
 }
 
 #pragma endregion [A6.2]
+#pragma region [A6.3]
+
+void CatchException(SimpleCLI* const cli)
+{
+    shared_ptr<int> sp1(new int(1));
+    weak_ptr<int> wp1 = weak_ptr<int>(sp1);
+
+    weak_ptr<int> wp2;
+
+    try {
+        cli->LogMessage("\b1st> Weak Pointer:", false);
+        CheckPointerWithException(wp1, cli, 1);
+        cli->LogMessage("\b2nd> Weak Pointer:", false);
+        CheckPointerWithException(wp2, cli, 1);
+    }
+    catch (string e)
+    {
+        cli->LogError("An exception occured during pointer check: "
+                      + e,
+                      false, true);
+    }
+}
+
+void CheckPointerWithException(const weak_ptr<int> &p,
+	                           SimpleCLI* const cli,
+		                       int count_help /*= 0*/)
+{
+    if (p.expired() || p.lock() == nullptr) {
+        string exception_message = "INVALID_POINTER";
+        throw exception_message;
+    }
+
+    cli->LogMessage("Weak pointer value: " + to_string(*(p.lock())), false);
+    cli->LogMessage("Shared pointer references: " + to_string(p.use_count())
+		            + " (+" + to_string(count_help)
+		            + " weak pointer references)");
+}
+
+#pragma endregion [A6.3]
