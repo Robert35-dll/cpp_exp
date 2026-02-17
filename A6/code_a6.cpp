@@ -3,7 +3,6 @@
 #include <limits>
 #include <memory>
 #include <string>
-#include <exception>
 #include "../A4/A4.3/SimpleCLI.h"
 
 using namespace std;

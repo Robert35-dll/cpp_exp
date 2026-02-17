@@ -213,3 +213,76 @@ shared_ptr<int> temp = w2.lock();   // s1.use_count() = 2
 // and accessing the referenced value
 int val = *temp;
 ```
+
+Weak pointers are useful for accessing values w/o forcing the program to keep them the whole time.
+This also prevents circular references that may occur by using shared pointers.
+
+## Exceptions
+
+Exceptions work quite the same way as in any other language.
+Once an exception occurs or is trown intentionally it's being passed to the underlying layer of stack memory until it reaches one of the following:
+1. A defined try-catch block that is specified to handle the occured exception.
+2. The `main()` w/o catch block where it'll lead to crash of the program.
+
+### Plain Exceptions
+
+In C++ value of any type can be thrown as an exception and be direcly used in the catch part of a try-catch block:
+
+```c++
+#include <iostream>
+#include <string>
+using namespace std;
+
+try {
+    throw "smth went wrong \\@o@/";
+}
+catch (string errMsg) {
+    cout << "Oh no:" << errMsg << endl;
+}
+```
+
+### `STL` Exceptions
+
+There're many predefined exception types provided by `STL` listed on [this cppreference](https://en.cppreference.com/w/cpp/error.html#Exception_categories).
+These work in the exact same way as plain exceptions with an additional inheritance from `exception` base class:
+
+```c++
+#include <iostream>
+#include <string>
+using namespace std;
+
+try {
+    throw runtime_exception("smth ran wrong x.x");
+}
+catch (const runtime_exception& runEx) {
+    // All exceptions have a what() explanation method
+    cout << "Oh no:" << runEx.what() << endl;
+}
+```
+
+#### Custom exceptions
+
+A custom exception class may be necessary, if this is actively used in the code.
+However the only difference to predefined ones is going to be the overriden `what()` method, if no other extentions are planned:
+
+```c++
+#include <exception>
+#include <string>
+using namespace std;
+
+class CustomException : public exception {
+private:
+    string errMsg;
+
+public:
+    CustomException(string errMsg_ = "Custom exception w/o info.")
+        : errMsg(errMsg_)
+    {};
+
+    const char* what() {
+        return errMsg.c_str();
+    }
+}
+```
+
+In most of the cases a plain string exception does the same job just as good ¯\_(ツ)_/¯
