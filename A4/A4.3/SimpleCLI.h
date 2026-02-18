@@ -39,6 +39,7 @@ class SimpleCLI
         
         int GetIntInput(string requestLine, bool isSigned = false);
         string GetStringInput(string requestLine);
+        float GetFloatInput(string requestLine, bool isSigned = false);
 
         void AddOption(string newOption, int index = -1);
         void SetOptions(vector<string> newOptions);
