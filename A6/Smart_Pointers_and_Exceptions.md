@@ -23,7 +23,7 @@ void* (*notEnoughPtrsFunc)(int* (*)[]));
 ```
 
 Therefore function pointers are more useful with functions of the same signature e.g. those needed for a simple calculator.
-Furthermore *class' methods have to be static* in order to use a pointer to such as withing as well as outside a class.
+Furthermore **class' methods have to be static** in order to use a pointer to such as withing as well as outside a class.
 
 After a function pointer variable is initialized it can be called as a normal function:
 
@@ -48,24 +48,24 @@ result = calculate(1, 1);       // result = 0 (for sure)
 
 ## Smart Pointers
 
-The following theory has been compiled from many pages about smart pointers on [cppreference.com](https://en.cppreference.com/book/intro/smart_pointers)
+The following theory has been compiled from many pages about smart pointers on [cppreference.com](https://en.cppreference.com/book/intro/smart_pointers).
 Check those for extensive knowledge and a deeper dive into the topic.
 
 Smart pointers are basically wrappers for raw pointers.
 These have two significant advantages:
 1. A smart pointer is destroyed automatically upon leaving the scope where it has been defined.
-2. The value a smart pointer refers to is destroyed when its owners count (amount of smart pointers to that object owning it) reaches 0.
+2. The value a smart pointer refers to is destroyed when its owners count (*amount of smart pointers to that object owning it*) reaches 0.
 
 However it's still possible to manually delete the pointed value and therefore make all its smart pointers invalid at once :3
 
 The underlying structure of smart pointers is rather simple and consists of:
 1. A pointer to the actual value.
-2. A pointer to control block:
-    2.1. Either a pointer or the value itself
-    2.2. Deleter (*to remove pointers or delete the value*)
-    2.3. Allocator (*to add pointers*)
-    2.4. Owners count (*amount of assigned shared pointers*)
-    2.5. Reference count (*amount of assigned weak pointers*)
+2. A pointer to control block which consists of:
+   - Either a pointer or the value itself
+   - Deleter (*to remove pointers or delete the value*)
+   - Allocator (*to add pointers*)
+   - Owners count (*amount of assigned shared pointers*)
+   - Reference count (*amount of assigned weak pointers*)
 
 The very first smart pointer was `auto_ptr`.
 It served similar purpose as `unique_ptr` does now and was replaced by the last with release of C++11.
@@ -285,4 +285,4 @@ public:
 }
 ```
 
-In most of the cases a plain string exception does the same job just as good ¯\_(ツ)_/¯
+In most of the cases a plain string exception does the same job just as good `¯\_(ツ)_/¯`
