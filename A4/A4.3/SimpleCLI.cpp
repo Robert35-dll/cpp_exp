@@ -315,3 +315,16 @@ void SimpleCLI::LogError(string description,
         cout << LineIndicator << endl;
     }
 }
+
+/**
+ * @brief Puts an emptu line into the output.
+ * @param isFinished: Whether to use special mark for the output.
+ */
+void SimpleCLI::InsertLineBreak(bool isFinished /*= false*/)
+{
+    string indicator = isFinished
+        ? FinishIndicator
+        : LineIndicator;
+
+    cout << indicator << endl;
+}

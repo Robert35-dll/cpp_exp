@@ -36,12 +36,16 @@ int main()
 
     cli.LogMessage("Initializing sensors...", false, true);
     for (auto &sensor : sensors) { sensor.get()->init(); }
+    cli.InsertLineBreak();
 
     cli.LogMessage("Updating values...", false, true);
     for (auto &sensor : sensors) { sensor.get()->update(); }
+    cli.InsertLineBreak();
 
     cli.LogMessage("Checking sensors' setup...", false, true);
     for (auto &sensor : sensors) { sensor.get()->iam(); }
+
+    cli.InsertLineBreak(true);
 
     return 1;
 }
