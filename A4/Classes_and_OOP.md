@@ -213,6 +213,113 @@ void C::IncClassCount()
 }
 ```
 
+## Inheritance
+
+Just as in any other language inheritance is specified in class' definition.
+However in C++ you can specify an access modifier to control members accessibility defined in the base class:
+
+```c++
+class Ancestor
+{
+// Access only withing ancestor
+private:
+    int age;
+
+// Access only withing ancestor and any descendant
+protected:
+    int id;
+
+// Access withing and outside of ancestor
+// Access withing and outside of descendant depends on modifier
+public:
+    char name[10];
+};
+
+// Remaining original modifiers
+class DescendantPublic : public Ancestor
+{
+    // age  -> no access
+    // id   -> access withing this and further descendants only
+    // name -> access withing and outside of this descendant
+};
+
+// Making all accessible members protected
+class DescendantProtected : protected Ancestor
+{
+    // age  -> no access
+    // id   -> access withing this and further descendants only
+    // name -> access withing this and further descendants only
+};
+
+// Making all accessible members private
+class DescendantPrivate : private Ancestor
+{
+    // age  -> no access
+    // id   -> access withing this descendant only
+    // name -> access withing this descendant only
+};
+```
+
+To treat all these descendants in the same way (*e.g. to use them as parameters or store in the same container*) pointers should be used:
+
+```c++
+// For this example all classes have been split into separate files
+#include "Ancestor.h"
+#include "DescendantPublic.h"
+#include "DescendantProtected.h"
+#include "DescendantPrivate.h"
+
+// Smart pointers are quite convenient to use here
+#include <memory>
+#include <vector>
+
+using namespace std;
+
+// Initializing pointers to single instance of each object
+shared_ptr<DescendantPublic>    dPub = make_shared<DescendantPublic>();
+shared_ptr<DescendantProtected> dPro = make_shared<DescendantProtected>();
+shared_ptr<DescendantPrivate>   dPri = make_shared<DescendantPrivate>();
+
+// Defining a vector to store all descendants
+vector<shared_ptr<Ancestor>> population;
+// and filling it with pointers to those
+population.push_back(dPub);
+population.push_back(dPro);
+population.push_back(dPri);
+```
+
+**Keep in mind** that if any method is reimplemented by descendants and is called from such container, consider either:
+
+- Casting the container element (*pointer*) to descendant class' one or
+- Specifying virtual methods.
+
+Without one of those options calling any method by dereferencing a pointer will lead to execution of its base method (*the one implemented by* `Ancestor`).
+
+### Virtual Methods
+
+In order to stress a polymorphic behaviour of descendants it's common to put `virtual` and `override` keywords to their methods:
+
+- `virtual` stays for "*there may be a descendant that implements this method too. Check that implementation first.*"
+- `override` stays for "*this method is inherited from the ancestor class and there's another implementation of it.*"
+
+```c++
+class Ancestor
+{
+public:
+    // This method is meant to be reimplemented by descendants
+    // If there're no descendants, run this one instead
+    virtual void think() { cout << "Ooga Booga!" << endl; }
+};
+
+class Descendant : public Ancestor
+{
+public:
+    // This method comes from the ancestor but
+    // can have another implementation
+    void think() override { cout << "damn, thats huge W" << endl; }
+};
+```
+
 ## Stack vs Heap
 
 This topic is meant to be covered in further updates but since it directly touches instantiation of classes it is noticeable here as well.
