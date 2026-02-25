@@ -320,6 +320,18 @@ public:
 };
 ```
 
+It's worth noticing that a method can be either virtual or static (*or none of both* `:D`).
+
+Another good hint is given by [this cppreference](https://en.cppreference.com/w/cpp/language/virtual.html):
+
+> A useful guideline is that the destructor of any base class must be public and virtual or protected and non-virtual, whenever delete expressions are involved, e.g. when implicitly used in std::unique_ptr(since C++11).
+
+While deriving from a class and referencing ancestors via pointers to that base class there's a risk to call the base' desctructor.
+Since descendants may allocate extra memory for their members this will not be freed by destroying base automatically.
+Therefore destructor of a base class should always either:
+- be declared as virtual and overridden by descendants or
+- be able to free all memory allocated by descendants
+
 ## Stack vs Heap
 
 This topic is meant to be covered in further updates but since it directly touches instantiation of classes it is noticeable here as well.
