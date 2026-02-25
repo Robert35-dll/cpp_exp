@@ -18,6 +18,7 @@ class SimpleCLI
         string OutputIndicator  = "[<]";
         string ErrorIndicator   = "[!]";
         string WarningIndicator = "[*]";
+        string FinishIndicator  = "[^]";
 
         string ExecutionDebug   = " |-<";
         string ExecutionError   = " |-<!>";
@@ -57,4 +58,5 @@ class SimpleCLI
         void LogError(string description,
                         bool hasLineBreak = true,
                         bool isUrgent = false);
+        void InsertLineBreak(bool isFinished = false);
 };

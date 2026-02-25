@@ -5,7 +5,8 @@ All code examples are primarily thought to use the stack memory pros and cons of
 
 ## File Structure of a Class
 
-Functionally classes work in the same way as in any other language. However C++ allows to split class declaration and implementation into two files: the header `.h` and the source `.cpp` files respectively.
+Functionally classes work in the same way as in any other language.
+However C++ allows to split class declaration and implementation into two files: the header `.h` and the source `.cpp` files respectively.
 
 An `.h` header file represents the interface of a class and should not contain any unnecessary `#include`s since it might significantly affect build time and performance.
 
@@ -211,6 +212,288 @@ void C::IncClassCount()
     // Here only static members are allowed!
     ClassCount++;
 }
+```
+
+## Inheritance
+
+Just as in any other language inheritance is specified in class' definition.
+However in C++ you can specify an access modifier to control members accessibility defined in the base class:
+
+```c++
+class Ancestor
+{
+// Access only withing ancestor
+private:
+    int age;
+
+// Access only withing ancestor and any descendant
+protected:
+    int id;
+
+// Access withing and outside of ancestor
+// Access withing and outside of descendant depends on modifier
+public:
+    char name[10];
+};
+
+// Remaining original modifiers
+class DescendantPublic : public Ancestor
+{
+    // age  -> no access
+    // id   -> access withing this and further descendants only
+    // name -> access withing and outside of this descendant
+};
+
+// Making all accessible members protected
+class DescendantProtected : protected Ancestor
+{
+    // age  -> no access
+    // id   -> access withing this and further descendants only
+    // name -> access withing this and further descendants only
+};
+
+// Making all accessible members private
+class DescendantPrivate : private Ancestor
+{
+    // age  -> no access
+    // id   -> access withing this descendant only
+    // name -> access withing this descendant only
+};
+```
+
+To treat all these descendants in the same way (*e.g. to use them as parameters or store in the same container*) pointers should be used:
+
+```c++
+// For this example all classes have been split into separate files
+#include "Ancestor.h"
+#include "DescendantPublic.h"
+#include "DescendantProtected.h"
+#include "DescendantPrivate.h"
+
+// Smart pointers are quite convenient to use here
+#include <memory>
+#include <vector>
+
+using namespace std;
+
+// Initializing pointers to single instance of each object
+shared_ptr<DescendantPublic>    dPub = make_shared<DescendantPublic>();
+shared_ptr<DescendantProtected> dPro = make_shared<DescendantProtected>();
+shared_ptr<DescendantPrivate>   dPri = make_shared<DescendantPrivate>();
+
+// Defining a vector to store all descendants
+vector<shared_ptr<Ancestor>> population;
+// and filling it with pointers to those
+population.push_back(dPub);
+population.push_back(dPro);
+population.push_back(dPri);
+```
+
+**Keep in mind** that if any method is reimplemented by descendants and is called from such container, consider either:
+
+- Casting the container element (*pointer*) to descendant class' one or
+- Specifying virtual methods.
+
+Without one of those options calling any method by dereferencing a pointer will lead to execution of its base method (*the one implemented by* `Ancestor`).
+
+### Virtual Methods
+
+In order to stress a polymorphic behaviour of descendants it's common to put `virtual` and `override` keywords to their methods:
+
+- `virtual` stays for "*there may be a descendant that implements this method too. Check that implementation first.*"
+- `override` stays for "*this method is inherited from the ancestor class and there's another implementation of it.*"
+
+```c++
+class Ancestor
+{
+public:
+    // This method is meant to be reimplemented by descendants
+    // If there're no other implementations, run this one instead
+    virtual void think() { cout << "Ooga Booga!" << endl; }
+};
+
+class Descendant : public Ancestor
+{
+public:
+    // This method comes from the ancestor but
+    // may have another implementation
+    void think() override { cout << "damn, thats huge W" << endl; }
+};
+```
+
+It's worth noticing that a method can be either virtual or static (*or none of both* `:D`).
+
+Another good hint is given by [this cppreference](https://en.cppreference.com/w/cpp/language/virtual.html):
+
+> A useful guideline is that the destructor of any base class must be public and virtual or protected and non-virtual, whenever delete expressions are involved, e.g. when implicitly used in std::unique_ptr(since C++11).
+
+While deriving from a class and referencing ancestors via pointers to that base class there's a risk to call the base' desctructor.
+Since descendants may allocate extra memory for their members this will not be freed by destroying base automatically.
+Therefore destructor of a base class should always either:
+- be declared as virtual and overridden by descendants or
+- be able to free all memory allocated by descendants
+
+### Virtual Classes
+
+A virtual method can also be forced to be overridden.
+In this case a that method will be declared as 'pure virtual' and its class itself as 'virtual' or 'abstract'.
+This is analog to static or abstract/static classes in C# and Java which cannot be instantiated by definition:
+
+```c++
+class Ancestor
+{
+public:
+    // This method can be reimplemented by descendants
+    // but doesn't have to
+    virtual void think() { cout << "Ooga Booga!" << endl; }
+    
+    // This method has to be reimplemented by descendants
+    virtual void eat()=0;
+}
+```
+
+### Multiple Inheritance
+
+In C++ descendants are allowed to have multiple ancestors at once:
+
+```c++
+class Dad
+{
+public:
+    int age;
+};
+
+class Mom
+{
+public:
+    char name[10];
+};
+
+class Child : public Dad, public Mom
+{
+    // age  -> access withing and outside of this descendant
+    // name -> access withing and outside of this descendant
+}
+```
+
+Sometimes ancestors may have their own ancestors as well.
+These might be inherited by descendants too, if allowed by all ancestors in-between:
+
+```c++
+// First order ancestors
+class Grandpa
+{
+private:
+    float height;
+};
+
+class Grandma
+{
+protected:
+    char eyeColor[5];
+};
+
+// Second order ancestors / descendants of the first ancestors
+// Inheriting virtually to avoid double instances of any ancestor
+// for further descendants
+class Dad : public virtual Grandpa, public virtual Grandma
+{
+public:
+    int age;
+};
+
+// Inheriting virtually to avoid double instances of any ancestor
+// for further descendants
+class Mom : public virtual Grandpa, public virtual Grandma
+{
+public:
+    char name[10];
+};
+
+// Final descendant
+// Inheriting normally since no further descendants are in sight
+class Child : public Dad, public Mom
+{
+    // height   -> no access
+    // eyeColor -> access withing this and further descendants only
+    // age      -> access withing and outside of this descendant
+    // name     -> access withing and outside of this descendant
+}
+```
+
+While using multiple inheritance it's crucial to specify virtual inheritance from farther ancestors (*Grandpa and Grandpa in above example*).
+Such virtual inheritance ensures members' unambiguity withing a single descendant's instance.
+The whole inheritance tree would look like this:
+
+```
+Grandma <+> Grandpa    // single eyeColor property from common Grandma
+      /     \
+    Mom     Dad        // single age and name properties from Dad and Mom
+      \     /
+       Child           // ^^^ inherited properties ^^^
+```
+
+Without virtual inheritance a program would need to memorize base classes for each subclass separately:
+
+```
+Grandma Grandpa Grandma Grandpa    //! double eyeColor property from both Grandmas !
+     \   /           \   /
+      Mom             Dad          // single age and name properties from Dad and Mom
+          \         /
+             Child                 // ^^^ inherited properties ^^^
+```
+
+This means that `Child` has `Dad::eyeColor` and `Mom::eyeColor` members at the same time which invalidates `Child::eyeColor`.
+This pattern is often referred as the "diamond problem" or the "Deadly Diamond of Death."
+
+### Friend Members
+
+As an alternative to access modifiers `friend` keyword can be used to allow certain functions and classes access any member of a certain class.
+There're two limitations of such 'friendship':
+
+- `friend` status cannot be inherited
+- `friend` status allows forward access only
+
+```c++
+class Mate
+{
+    // Allowing StrangeFunction to access private members
+    friend void* StrangeFunction(Mate &mate);
+    // Allowing Stranger class to access private members
+    // Note: Nate cannot access Stranger's private members
+    friend class Stranger;
+
+private:
+    // These are accessible for Stranger
+    int phoneNumber;
+    float location[2];
+};
+
+// Some strange funciton with explicit access to all Mate's members
+void* StrangeFunction(Mate &mate)
+{
+    mate.location[0] = rand();
+    mate.location[1] = rand();
+
+    return nullptr;
+}
+
+// Some Stranger class with explicit access to all Mate's members
+class Stranger
+{
+private:
+    // This is unaccessible for Mate
+    char name[10];
+
+public:
+    void scam(Mate &mate)
+    {
+        cout << "Exploiting phone number '"
+             << mate.phoneNumber
+             << "' (｀∀´)Ψ"
+        << endl;
+    }
+};
 ```
 
 ## Stack vs Heap
