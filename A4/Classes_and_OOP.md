@@ -5,7 +5,8 @@ All code examples are primarily thought to use the stack memory pros and cons of
 
 ## File Structure of a Class
 
-Functionally classes work in the same way as in any other language. However C++ allows to split class declaration and implementation into two files: the header `.h` and the source `.cpp` files respectively.
+Functionally classes work in the same way as in any other language.
+However C++ allows to split class declaration and implementation into two files: the header `.h` and the source `.cpp` files respectively.
 
 An `.h` header file represents the interface of a class and should not contain any unnecessary `#include`s since it might significantly affect build time and performance.
 
@@ -307,7 +308,7 @@ class Ancestor
 {
 public:
     // This method is meant to be reimplemented by descendants
-    // If there're no descendants, run this one instead
+    // If there're no other implementations, run this one instead
     virtual void think() { cout << "Ooga Booga!" << endl; }
 };
 
@@ -315,7 +316,7 @@ class Descendant : public Ancestor
 {
 public:
     // This method comes from the ancestor but
-    // can have another implementation
+    // may have another implementation
     void think() override { cout << "damn, thats huge W" << endl; }
 };
 ```
@@ -375,7 +376,7 @@ class Child : public Dad, public Mom
 }
 ```
 
-Sometimes ancestors may have their own ancestors too.
+Sometimes ancestors may have their own ancestors as well.
 These might be inherited by descendants too, if allowed by all ancestors in-between:
 
 ```c++
@@ -425,21 +426,21 @@ Such virtual inheritance ensures members' unambiguity withing a single descendan
 The whole inheritance tree would look like this:
 
 ```
-Grandma <+> Grandpa    // single eyeColor from Grandma
+Grandma <+> Grandpa    // single eyeColor property from common Grandma
       /     \
-    Mom     Dad        // single age and name from Dad and Mom
+    Mom     Dad        // single age and name properties from Dad and Mom
       \     /
-       Child
+       Child           // ^^^ inherited properties ^^^
 ```
 
 Without virtual inheritance a program would need to memorize base classes for each subclass separately:
 
 ```
-Grandma Grandpa Grandma Grandpa    //! double eyeColor from both Grandmas !
+Grandma Grandpa Grandma Grandpa    //! double eyeColor property from both Grandmas !
      \   /           \   /
-      Mom             Dad          // single age and name from Dad and Mom
+      Mom             Dad          // single age and name properties from Dad and Mom
           \         /
-             Child
+             Child                 // ^^^ inherited properties ^^^
 ```
 
 This means that `Child` has `Dad::eyeColor` and `Mom::eyeColor` members at the same time which invalidates `Child::eyeColor`.
@@ -463,6 +464,7 @@ class Mate
     friend class Stranger;
 
 private:
+    // These are accessible for Stranger
     int phoneNumber;
     float location[2];
 };
