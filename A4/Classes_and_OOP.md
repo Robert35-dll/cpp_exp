@@ -445,6 +445,55 @@ Grandma Grandpa Grandma Grandpa    //! double eyeColor from both Grandmas !
 This means that `Child` has `Dad::eyeColor` and `Mom::eyeColor` members at the same time which invalidates `Child::eyeColor`.
 This pattern is often referred as the "diamond problem" or the "Deadly Diamond of Death."
 
+### Friend Members
+
+As an alternative to access modifiers `friend` keyword can be used to allow certain functions and classes access any member of a certain class.
+There're two limitations of such 'friendship':
+
+- `friend` status cannot be inherited
+- `friend` status allows forward access only
+
+```c++
+class Mate
+{
+    // Allowing StrangeFunction to access private members
+    friend void* StrangeFunction(Mate &mate);
+    // Allowing Stranger class to access private members
+    // Note: Nate cannot access Stranger's private members
+    friend class Stranger;
+
+private:
+    int phoneNumber;
+    float location[2];
+};
+
+// Some strange funciton with explicit access to all Mate's members
+void* StrangeFunction(Mate &mate)
+{
+    mate.location[0] = rand();
+    mate.location[1] = rand();
+
+    return nullptr;
+}
+
+// Some Stranger class with explicit access to all Mate's members
+class Stranger
+{
+private:
+    // This is unaccessible for Mate
+    char name[10];
+
+public:
+    void scam(Mate &mate)
+    {
+        cout << "Exploiting phone number '"
+             << mate.phoneNumber
+             << "' (｀∀´)Ψ"
+        << endl;
+    }
+};
+```
+
 ## Stack vs Heap
 
 This topic is meant to be covered in further updates but since it directly touches instantiation of classes it is noticeable here as well.
