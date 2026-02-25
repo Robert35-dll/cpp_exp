@@ -332,6 +332,119 @@ Therefore destructor of a base class should always either:
 - be declared as virtual and overridden by descendants or
 - be able to free all memory allocated by descendants
 
+### Virtual Classes
+
+A virtual method can also be forced to be overridden.
+In this case a that method will be declared as 'pure virtual' and its class itself as 'virtual' or 'abstract'.
+This is analog to static or abstract/static classes in C# and Java which cannot be instantiated by definition:
+
+```c++
+class Ancestor
+{
+public:
+    // This method can be reimplemented by descendants
+    // but doesn't have to
+    virtual void think() { cout << "Ooga Booga!" << endl; }
+    
+    // This method has to be reimplemented by descendants
+    virtual void eat()=0;
+}
+```
+
+### Multiple Inheritance
+
+In C++ descendants are allowed to have multiple ancestors at once:
+
+```c++
+class Dad
+{
+public:
+    int age;
+};
+
+class Mom
+{
+public:
+    char name[10];
+};
+
+class Child : public Dad, public Mom
+{
+    // age  -> access withing and outside of this descendant
+    // name -> access withing and outside of this descendant
+}
+```
+
+Sometimes ancestors may have their own ancestors too.
+These might be inherited by descendants too, if allowed by all ancestors in-between:
+
+```c++
+// First order ancestors
+class Grandpa
+{
+private:
+    float height;
+};
+
+class Grandma
+{
+protected:
+    char eyeColor[5];
+};
+
+// Second order ancestors / descendants of the first ancestors
+// Inheriting virtually to avoid double instances of any ancestor
+// for further descendants
+class Dad : public virtual Grandpa, public virtual Grandma
+{
+public:
+    int age;
+};
+
+// Inheriting virtually to avoid double instances of any ancestor
+// for further descendants
+class Mom : public virtual Grandpa, public virtual Grandma
+{
+public:
+    char name[10];
+};
+
+// Final descendant
+// Inheriting normally since no further descendants are in sight
+class Child : public Dad, public Mom
+{
+    // height   -> no access
+    // eyeColor -> access withing this and further descendants only
+    // age      -> access withing and outside of this descendant
+    // name     -> access withing and outside of this descendant
+}
+```
+
+While using multiple inheritance it's crucial to specify virtual inheritance from farther ancestors (*Grandpa and Grandpa in above example*).
+Such virtual inheritance ensures members' unambiguity withing a single descendant's instance.
+The whole inheritance tree would look like this:
+
+```
+Grandma <+> Grandpa    // single eyeColor from Grandma
+      /     \
+    Mom     Dad        // single age and name from Dad and Mom
+      \     /
+       Child
+```
+
+Without virtual inheritance a program would need to memorize base classes for each subclass separately:
+
+```
+Grandma Grandpa Grandma Grandpa    //! double eyeColor from both Grandmas !
+     \   /           \   /
+      Mom             Dad          // single age and name from Dad and Mom
+          \         /
+             Child
+```
+
+This means that `Child` has `Dad::eyeColor` and `Mom::eyeColor` members at the same time which invalidates `Child::eyeColor`.
+This pattern is often referred as the "diamond problem" or the "Deadly Diamond of Death."
+
 ## Stack vs Heap
 
 This topic is meant to be covered in further updates but since it directly touches instantiation of classes it is noticeable here as well.
