@@ -32,6 +32,13 @@ Window {
             Layout.preferredHeight: 70
             color                 : "#274e13"
 
+            Rectangle {
+                anchors.bottom: parent.bottom
+                width         : parent.width
+                height        : 5
+                color         : "#000000"
+            }
+
             Text {
                 anchors.right         : parent.right
                 anchors.verticalCenter: parent.verticalCenter
@@ -63,9 +70,8 @@ Window {
                 hoverEnabled     : true
 
                 Rectangle {
-                    id          : shadow
-                    width       : parent.width + 7
-                    height      : parent.height + 7
+                    width       : parent.width + 5
+                    height      : parent.height + 5
                     color       : "#000000"
                 }
 
@@ -86,7 +92,37 @@ Window {
                 }
             }
 
-            CalcButton { text: "Off"; bgColor: "#cf2a27" } CalcButton { text: "CE"; bgColor: "#597eaa" } CalcButton { text: "C"; bgColor: "#597eaa" } CalcButton { text: "÷"; bgColor: "#6fa8dc" }
+            // The top row except the '+' operand
+            CalcButton {
+                text: "Off"
+                bgColor: "#cf2a27"
+
+                ToolTip {
+                    delay: 100
+                    text: "Exit the program"
+                }
+            }
+            CalcButton {
+                text: "CE"
+                bgColor: "#597eaa"
+
+                ToolTip {
+                    delay: 100
+                    text: "Clear whole equation"
+                }
+            }
+            CalcButton {
+                text: "C"
+                bgColor: "#597eaa"
+
+                ToolTip {
+                    delay: 100
+                    text: "Clear current input"
+                }
+            }
+
+            // The numpad with the rest of buttons
+                                                                                                                                                      CalcButton { text: "÷"; bgColor: "#6fa8dc" }
             CalcButton { text: "7"  ;                    } CalcButton { text: "8" ;                    } CalcButton { text: "9";                    } CalcButton { text: "-"; bgColor: "#6fa8dc" }
             CalcButton { text: "4"  ;                    } CalcButton { text: "5" ;                    } CalcButton { text: "6";                    } CalcButton { text: "×"; bgColor: "#6fa8dc" }
             CalcButton { text: "1"  ;                    } CalcButton { text: "2" ;                    } CalcButton { text: "3";                    } CalcButton { text: "/"; bgColor: "#6fa8dc" }
