@@ -16,6 +16,7 @@ qt_add_qml_module(appSimple_Calculator
     URI Simple_Calculator
     QML_FILES
         Main.qml
+        SOURCES calculator.h calculator.cpp
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
