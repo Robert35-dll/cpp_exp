@@ -60,25 +60,27 @@ Window {
             rowSpacing       : 10
             columnSpacing    : 10
 
-            // Helper component to create buttons
+            // Base component to create buttons
             component CalcButton : Button {
-                property alias bgColor: bg.color
+                property alias bgColor: bg.color;
 
                 Layout.fillWidth : true
                 Layout.fillHeight: true
                 flat             : true
                 hoverEnabled     : true
 
+                // Adding some shadow
                 Rectangle {
                     width       : parent.width + 5
                     height      : parent.height + 5
                     color       : "#000000"
                 }
 
+                // Adding some background
                 Rectangle {
                     id          : bg
                     anchors.fill: parent
-                    color       : "#bf9000"
+                    color       : "#000000"
                 }
 
                 contentItem: Text {
@@ -92,41 +94,112 @@ Window {
                 }
             }
 
-            // The top row except the '+' operand
+
+            // Base number buttons' component
+            component NumberButton : CalcButton {
+                bgColor: "#bf9000"
+
+                // Setting shortcut to button's symbol by default
+                Shortcut {
+                    sequence   : text
+                    onActivated: click();
+                }
+
+                // Adding digit upon clicking
+                onClicked: calculator.addDigit(Number(text));
+            }
+
+            // Base operand buttons' component
+            component OperandButton : CalcButton {
+                bgColor: "#6fa8dc"
+
+                // Setting shortcut to button's symbol by default
+                Shortcut {
+                    sequence   : text
+                    onActivated: click();
+                }
+
+                // Setting operand to button's symbol upon clicking
+                onClicked: calculator.setOperand(text);
+            }
+
+            // Buttons' definitions
+            // [First Row] (top)
             CalcButton {
-                text: "Off"
+                id     : exitButton
+                text   : "Off"
                 bgColor: "#cf2a27"
 
                 ToolTip {
                     delay: 100
-                    text: "Exit the program"
+                    text : "Exit the program"
                 }
+
+                Shortcut {
+                    sequence   : "ESC"
+                    onActivated: exitButton.click();
+                }
+
+                onClicked: close();
             }
             CalcButton {
-                text: "CE"
+                id     : resetButton
+                text   : "CE"
                 bgColor: "#597eaa"
 
                 ToolTip {
                     delay: 100
-                    text: "Clear whole equation"
+                    text : "Clear whole equation"
                 }
+
+                Shortcut {
+                    sequence   : "Shift+Backspace"
+                    onActivated: resetButton.click();
+                }
+
+                onClicked: calculator.clear(true);
             }
             CalcButton {
-                text: "C"
+                id     : clearButton
+                text   : "C"
                 bgColor: "#597eaa"
 
                 ToolTip {
                     delay: 100
-                    text: "Clear current input"
+                    text : "Clear current input"
                 }
-            }
 
-            // The numpad with the rest of buttons
-                                                                                                                                                      CalcButton { text: "÷"; bgColor: "#6fa8dc" }
-            CalcButton { text: "7"  ;                    } CalcButton { text: "8" ;                    } CalcButton { text: "9";                    } CalcButton { text: "-"; bgColor: "#6fa8dc" }
-            CalcButton { text: "4"  ;                    } CalcButton { text: "5" ;                    } CalcButton { text: "6";                    } CalcButton { text: "×"; bgColor: "#6fa8dc" }
-            CalcButton { text: "1"  ;                    } CalcButton { text: "2" ;                    } CalcButton { text: "3";                    } CalcButton { text: "/"; bgColor: "#6fa8dc" }
-            CalcButton { text: "+/-"; bgColor: "#93c47d" } CalcButton { text: "0" ;                    } CalcButton { text: ","; bgColor: "#6aa84f" } CalcButton { text: "="; bgColor: "#009e0f" }
+                Shortcut {
+                    sequence   : "Backspace"
+                    onActivated: clearButton.click();
+                }
+
+                onClicked: calculator.clear(false);
+            }
+            OperandButton { text: "+" }
+
+            // [Second Row]
+            NumberButton { text: "7" } NumberButton { text: "8" } NumberButton { text: "9" } OperandButton { text: "-" }
+            // [Third Row]
+            NumberButton { text: "4" } NumberButton { text: "5" } NumberButton { text: "6" } OperandButton { text: "*" }
+            // [Fourth Row]
+            NumberButton { text: "1" } NumberButton { text: "2" } NumberButton { text: "3" } OperandButton { text: "/" }
+
+            // [Fifth Row] (bottom)
+            OperandButton {
+                text: "+/-"
+                bgColor: "#93c47d"
+            }
+            NumberButton { text: "0" }
+            OperandButton {
+                text: ","
+                bgColor: "#6aa84f"
+            }
+            CalcButton {
+                text: "="
+                bgColor: "#009e0f"
+                onClicked: calculator.calculate();
+            }
         }
     }
 }
