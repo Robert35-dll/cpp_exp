@@ -23,7 +23,7 @@ public:
     explicit Calculator(QObject *parent = nullptr)
         : QObject{parent},
         displayedNumber(0),
-        calculationResult(0),
+        reservedNumber(0),
         decimalPower(0)
     {}
 

@@ -79,6 +79,7 @@ void Calculator::setOperand(QString newOperand)
         default: this->applyOperand = nullptr;
     }
 
+    this->reservedNumber = this->displayedNumber;
     this->displayedNumber = 0;
     emit displayedNumberChanged(this->displayedNumber);
 
@@ -97,9 +98,7 @@ void Calculator::calculate()
         return;
     }
 
-    this->calculationResult = this->applyOperand(this->calculationResult, this->displayedNumber);
-    this->displayedNumber = this->calculationResult;
-
+    this->displayedNumber = this->applyOperand(this->reservedNumber, this->displayedNumber);
     emit displayedNumberChanged(this->displayedNumber);
 
     this->applyOperand = nullptr;
@@ -108,8 +107,9 @@ void Calculator::calculate()
 
 void Calculator::clear(bool isReset)
 {
-    if (isReset) {
-        this->calculationResult = 0;
+    if (isReset)
+    {
+        this->reservedNumber = 0;
         this->applyOperand = nullptr;
     }
 
