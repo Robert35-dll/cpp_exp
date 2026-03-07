@@ -8,16 +8,16 @@ class Calculator : public QObject
     Q_OBJECT
     QML_ELEMENT
 
-    double  displayedNumber;
-    double  calculationResult;
+    float  displayedNumber;
+    float  reservedNumber;
     int     decimalPower;
 
-    double (*applyOperand)(double, double);
+    float (*applyOperand)(float, float);
 
-    static double add     (double a, double b) { return a + b; }
-    static double subtract(double a, double b) { return a - b; }
-    static double multiply(double a, double b) { return a * b; }
-    static double divide  (double a, double b) { return a / b; }
+    static float add     (float a, float b) { return a + b; }
+    static float subtract(float a, float b) { return a - b; }
+    static float multiply(float a, float b) { return a * b; }
+    static float divide  (float a, float b) { return a / b; }
 
 public:
     explicit Calculator(QObject *parent = nullptr)
@@ -34,6 +34,6 @@ public:
     Q_INVOKABLE void clear(bool isReset /*= false*/);
 
 signals:
-    void displayedNumberChanged(double newNumber);
+    void displayedNumberChanged(float newNumber);
     void errorOccurred();
 };

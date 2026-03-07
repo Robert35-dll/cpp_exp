@@ -8,7 +8,7 @@ void Calculator::addDigit(int newDigit)
     // If input is decimal
     // -> add the digit to the end of the decimal part
     if (this->decimalPower != 0) {
-        this->displayedNumber += newDigit / this->decimalPower;
+        this->displayedNumber += static_cast<float>(newDigit) / this->decimalPower;
         this->decimalPower *= 10;
     } else {
         // Otherwise -> add to the end of the integer part
