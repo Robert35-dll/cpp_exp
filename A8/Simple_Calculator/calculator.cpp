@@ -21,15 +21,18 @@ void Calculator::addDigit(int newDigit)
 
 void Calculator::setOperand(QString newOperand)
 {
-    // TODO: replace with map
-    int operandCode = newOperand.toInt();
-    qDebug() << newOperand << operandCode;
+    std::map<QString, char> translate = {
+        { "+", '+' },
+        { "-", '-' },
+        { "*", '*' },
+        { "/", '/' },
+        { ",", ',' },
+        { "+/-", '!' }
+    };
 
-    if (this->applyOperand != nullptr &&
-        this->displayedNumber != 0)
-    {
-        this->calculate();
-    }
+    char operandCode;
+    try { operandCode = translate.at(newOperand); }
+    catch (std::out_of_range) {}
 
     if (operandCode == ',' &&
         this->decimalPower == 0)
@@ -45,20 +48,31 @@ void Calculator::setOperand(QString newOperand)
         return;
     }
 
-    switch (operandCode) {
-        case '+': {
+    if (this->applyOperand != nullptr &&
+        this->displayedNumber != 0)
+    {
+        this->calculate();
+    }
+
+    switch (operandCode)
+    {
+        case '+':
+        {
             this->applyOperand = Calculator::add;
             break;
         }
-        case '-': {
+        case '-':
+        {
             this->applyOperand = Calculator::subtract;
             break;
         }
-        case '*': {
+        case '*':
+        {
             this->applyOperand = Calculator::multiply;
             break;
         }
-        case '/': {
+        case '/':
+        {
             this->applyOperand = Calculator::divide;
             break;
         }
