@@ -5,6 +5,13 @@
 
 void Calculator::addDigit(int newDigit)
 {
+    if (this->displayedNumber != 0 &&
+        this->reservedNumber != 0 &&
+        this->applyOperand == nullptr)
+    {
+        this->clear(true);
+    }
+
     // If input is decimal
     // -> add the digit to the end of the decimal part
     if (this->decimalPower != 0) {
@@ -83,7 +90,7 @@ void Calculator::setOperand(QString newOperand)
     this->displayedNumber = 0;
     emit displayedNumberChanged(this->displayedNumber);
 
-    this->decimalPower = 1;
+    this->decimalPower = 0;
 }
 
 void Calculator::calculate()
