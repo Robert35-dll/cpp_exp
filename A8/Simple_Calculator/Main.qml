@@ -11,6 +11,8 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
+import CalculatorComponent 1.0
+
 Window {
     width  : 640
     height : 480
@@ -19,6 +21,17 @@ Window {
     title  : qsTr("Simple Calculator :D")
 
     property string display: "0"
+
+    Calculator {
+        id: calculator
+
+        onDisplayedNumberChanged: function(newNumber) {
+            display = newNumber;
+        }
+        onErrorOccurred: {
+            display = "ERROR ( °□°)";
+        }
+    }
 
     ColumnLayout {
         anchors.fill     : parent
