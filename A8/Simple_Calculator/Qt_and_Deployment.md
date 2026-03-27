@@ -118,3 +118,87 @@ Item {
 ```
 
 ### Signal/Slot Communication
+
+In other words event-driven communication or sender-observer pattern.
+Qt offers this powerful mechanism out of the box for nearly any inter-component connection (*e.g. frontend to backend*).
+This can be used for similar connections within single classes as well.
+Therefore any class derived from `QObject` **and** mentioning the `Q_OBJECT` macro can define its signals and slots for such purposes:
+
+```c++
+#pragma once
+
+#include <QQmlEngine>
+#include <QObject>
+
+class C : public QObject
+{
+    Q_OBJECT
+    QML_ELEMENT
+
+public:
+    C(QObject *parent = nullptr)
+     : QObject(parent)
+    {}
+
+// These events can be listened from other components
+signals:
+    void propChanged(int newProp);
+
+// These methods can be attached to signals from other components
+slots:
+    void DoSmth(float someValue);
+}
+```
+
+It's worth noting that both signals and slots don't have to have any return values.
+Since signals are emitted to start their slots' execution (*without checking if they're actually executable*) a return value doesn't make any practical sense.
+Eventhough slots are effectively regular methods, their return values don't impact anything in case a slot is executed automatically by Qt itself after certain signal is fired.
+
+#### Connecting with C++
+
+To assign slots to signals the `QObject::connect` method is used on the backend side:
+
+```c++
+#include "C.h"
+#include <QObject>
+
+int main()
+{
+    C c1, c2;
+
+    // Connecting two objects to each other
+    QObject::connect(&c1, &C::propChanged,  // First the sender + signal
+                     &c2, &C::DoSmth);      // Then the receiver + slot
+}
+```
+
+Slot argument can be substituted with a static method or a lambda expression just as good:
+
+```c++
+    // Attaching a static method to a signal
+    QObject::connect(&c1, &C::propChanged,
+                     &c2, &C::SomeStaticFunc);
+
+    // Attaching a custom lambda expression to a signal
+    // Note: assuming this happens within a class
+    QObject::connect(&c1, &C::propChanged,
+                     this, [=](int newProp) { /* some logic */ };
+                     );
+```
+
+#### Connecting with QML
+
+To assign some logic to signals in QML you can simply define a function for required parameters (*optional*):
+
+```qml
+import CComponent 1.0
+
+Item {
+    C {
+        // It won't fail anything, if you'll forget the signal's signature /ᐠ｡ᆺ｡ᐟ\
+        onPropChanged: function() {
+            // do some stuff
+        }
+    }
+}
+```
