@@ -6,15 +6,11 @@ on:
       - qt-framework
     paths:
       - 'A8/Simple_Calculator/**/*'
-    paths-ignore:
-      - 'A8/Simple_Calculator/README.md'
   pull_request:
     branches:
       - main
     paths:
       - 'A8/Simple_Calculator/**/*'
-    paths-ignore:
-      - 'A8/Simple_Calculator/README.md'
 
 jobs:
   build-win:
@@ -22,27 +18,27 @@ jobs:
 
     steps:
       - name: Checkout
-      - uses: actions/checkout@v4
+        uses: actions/checkout@v4
 
       - name: Set up Qt
         uses: jurplel/install-qt-action@v3
         with:
           version: '6.8'
+          arch: 'win64_msvc2022_64'
+          cache: 'true'
 
       - name: Build for Windows
         run: |
-          mkdir build
-          cd build
-          cmake .. -DCMAKE_BUILD_TYPE=MinSizeRel
-          cmake --build . --config MinSizeRel
+          cmake -S ./A8/Simple_Calculator/ -B ./A8/Simple_Calculator/build/ -DCMAKE_BUILD_TYPE=MinSizeRel
+          cmake --build ./A8/Simple_Calculator/build/ --config MinSizeRel
 
       - name: Package (windeployqt)
         shell: pwsh
         run: |
-          windeployqt --release --no-translations --compiler-runtime build/MinSizeRel/Simple_Calculator.exe
+          windeployqt --release --no-translations --compiler-runtime --qmldir ./A8/Simple_Calculator/ ./A8/Simple_Calculator/build/MinSizeRel/
 
       - name: Upload Windows Executable
         uses: actions/upload-artifact@v4
         with:
           name: Simple_Calculator_win64.exe
-          path: build/MinSizeRel/Simple_Calculator.exe
+          path: ./A8/Simple_Calculator/build/MinSizeRel
