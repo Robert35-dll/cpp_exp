@@ -50,6 +50,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
 
+      - name: Install libxcv-cursor
+        run: |
+          sudo apt-get install -y libxcb-cursor0
+
       - name: Set up Qt
         uses: jurplel/install-qt-action@v3
         with:
@@ -68,7 +72,7 @@ jobs:
         run: |
           wget -c https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage
           chmod +x linuxdeployqt-continuous-x86_64.AppImage
-          ./linuxdeployqt-continuous-x86_64.AppImage ./A8/Simple_Calculator/build/appSimple_Calculator -qmldir=./A8/Simple_Calculator/ -appimage
+          ./linuxdeployqt-continuous-x86_64.AppImage ./A8/Simple_Calculator/build/appSimple_Calculator -qmldir=./A8/Simple_Calculator/ -always-overwrite -exclude-libs=libqsqlmimer
       
       - name: Upload Linux AppImage
         uses: actions/upload-artifact@v4
