@@ -1,0 +1,48 @@
+name: Build Simple Calculator (Win+Lin)
+on:
+  push:
+    branches:
+      - main
+      - qt-framework
+    paths:
+      - 'A8/Simple_Calculator/**/*'
+    paths-ignore:
+      - 'A8/Simple_Calculator/README.md'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'A8/Simple_Calculator/**/*'
+    paths-ignore:
+      - 'A8/Simple_Calculator/README.md'
+
+jobs:
+  build-win:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+      - uses: actions/checkout@v4
+
+      - name: Set up Qt
+        uses: jurplel/install-qt-action@v3
+        with:
+          version: '6.8'
+
+      - name: Build for Windows
+        run: |
+          mkdir build
+          cd build
+          cmake .. -DCMAKE_BUILD_TYPE=MinSizeRel
+          cmake --build . --config MinSizeRel
+
+      - name: Package (windeployqt)
+        shell: pwsh
+        run: |
+          windeployqt --release --no-translations --compiler-runtime build/MinSizeRel/Simple_Calculator.exe
+
+      - name: Upload Windows Executable
+        uses: actions/upload-artifact@v4
+        with:
+          name: Simple_Calculator_win64.exe
+          path: build/MinSizeRel/Simple_Calculator.exe
