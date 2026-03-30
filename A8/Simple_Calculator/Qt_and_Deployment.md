@@ -202,3 +202,98 @@ Item {
     }
 }
 ```
+
+## Deployment
+
+Once the project is ready to be delivered to the user you have to think about distributing it as an ordinary app.
+This is already done by QtCreator when building a project for a test run.
+Yes, the contents of the build directory is already the app you can roll out.
+Thanks to `cmake` the binary file is created for the host machine automatically: `.exe` and `plain binaries` will match the OS.
+
+The only issue with those folders is that they might not contain the required Qt core libraries.
+There're couple of tools to work this around: `windeployqt` and `linuxdeployqt`.
+Alternatively you can seek for the required `.dll` files in your Qt-root and copy them into the build directory `:3`
+
+If you want to compress the project down to a single executable, you have to add compiled Qt libraries yourself to it which will:
+1. Take a while
+2. Increase the size of the end file dramatically
+
+It's quite common to stick to the folder option though.
+
+### Deploying for Windows
+
+With `windeployqt` you can easily prepare a release of your project.
+Qt has written an [extensive documentation](https://doc.qt.io/qt-6/windows-deployment.html) about this tool but essential is the following command:
+
+```bash
+windeployqt --qmldir <path-to-app-qml-files> <path-to-app-binary>
+```
+
+After using it you should have a ready to deliver release directory.
+
+### Deploying for Linux
+
+There's similar tool called [`linuxdeployqt`](https://github.com/probonopd/linuxdeployqt) for Linux systems.
+To use `linuxdeployqt` execute a similar command:
+
+```bash
+linuxdeployqt <path-to-app-binary> -qmldir=<path>
+```
+
+However:
+
+> `linuxdeployqt` refuses to work on systems any newer than
+the oldest currently still-supported Ubuntu LTS release,
+because we want to encourage developers to build applications
+in a way that makes them possible to run
+on all still-supported distribution releases.
+
+which literally means that you might have to switch to an older Linux version.
+For this sake there're GitHub Actions that allow to build for both Windows and Linux at once.
+
+### GitHub Workflows
+
+Workflows are kind of routine scripts executed upon certain git events.
+Their execution can be monitored at the dedicated 'Actions' tab on the website.
+There're many such routines defined as actions and ready to use.
+To build a Qt project you'll need these actions:
+1. Checkout - `actions/checkout@v6`
+2. Qt Installer - `jurplel/install-qt-action@v3`
+3. Artifact Uploader - `actions/upload-artifact@v4`
+
+as well as couple of building scripts.
+
+The workflow `.yml` file must be stored at `./.github/workflows/` directory.
+A single workflow file is built like this:
+
+```yml
+name: <workflow-name>
+# A list of triggering events
+on:
+  push:
+    branches:
+      - <branch-name>
+  pull_request:
+    paths:
+      - <paths_to_triggering_files_or_directories>
+
+# A step by step description of the workflow
+jobs:
+  <job_name>:
+    runs-on: <target_system>
+
+    steps:
+      # An Action Step
+      - name: <step_name>
+        uses: <action_link>
+        
+      # A Script Step
+      - name: <step_name>
+        [shell: pwsh]
+        run: |
+          <command_to_run>
+```
+
+An example workflow for this project is stored at [./.github/workflows/build_calculator.yml](../../.github/workflows/build_calculator.yml)
+
+See [the official syntax reference](https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax) for more options.
