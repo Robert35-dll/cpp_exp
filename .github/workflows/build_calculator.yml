@@ -1,0 +1,80 @@
+name: Build Simple Calculator (Win+Lin)
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'A8/Simple_Calculator/**/*'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'A8/Simple_Calculator/**/*'
+
+jobs:
+  build-win:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Set up Qt
+        uses: jurplel/install-qt-action@v3
+        with:
+          version: '6.8'
+          arch: 'win64_msvc2022_64'
+          cache: 'true'
+
+      - name: Build for Windows
+        run: |
+          cmake -S ./A8/Simple_Calculator/ -B ./A8/Simple_Calculator/build/ -DCMAKE_BUILD_TYPE=MinSizeRel
+          cmake --build ./A8/Simple_Calculator/build/ --config MinSizeRel
+
+      - name: Package (windeployqt)
+        shell: pwsh
+        run: |
+          windeployqt --release --no-translations --compiler-runtime --qmldir ./A8/Simple_Calculator/ ./A8/Simple_Calculator/build/MinSizeRel/
+
+      - name: Upload Windows Executable
+        uses: actions/upload-artifact@v4
+        with:
+          name: Simple_Calculator_win64.exe
+          path: ./A8/Simple_Calculator/build/MinSizeRel
+
+  build-lin:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Install libxcv-cursor
+        run: |
+          sudo apt-get install -y libxcb-cursor0
+
+      - name: Set up Qt
+        uses: jurplel/install-qt-action@v3
+        with:
+          aqtversion: '==3.3.*'
+          version: '6.8.3'
+          host: 'linux'
+          arch: 'linux_gcc_64'
+          cache: 'true'
+
+      - name: Build for Linux
+        run: |
+          cmake -S ./A8/Simple_Calculator/ -B ./A8/Simple_Calculator/build/ -DCMAKE_BUILD_TYPE=MinSizeRel
+          cmake --build ./A8/Simple_Calculator/build/ --config MinSizeRel
+
+      - name: Package (linuxdeployqt)
+        run: |
+          wget -c https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage
+          chmod +x linuxdeployqt-continuous-x86_64.AppImage
+          ./linuxdeployqt-continuous-x86_64.AppImage ./A8/Simple_Calculator/build/appSimple_Calculator -qmldir=./A8/Simple_Calculator/ -always-overwrite -exclude-libs=libqsqlmimer
+      
+      - name: Upload Linux AppImage
+        uses: actions/upload-artifact@v4
+        with:
+          name: Simple_Calculator
+          path: ./A8/Simple_Calculator/build
