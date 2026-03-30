@@ -3,7 +3,6 @@ on:
   push:
     branches:
       - main
-      - qt-framework
     paths:
       - 'A8/Simple_Calculator/**/*'
   pull_request:
