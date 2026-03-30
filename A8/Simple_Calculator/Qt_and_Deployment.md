@@ -206,12 +206,18 @@ Item {
 ## Deployment
 
 Once the project is ready to be delivered to the user you have to think about distributing it as an ordinary app.
-This is already done by QtCreator when building a project for a test run.
-Yes, the contents of the build directory is already the app you can roll out.
-Thanks to `cmake` the binary file is created for the host machine automatically: `.exe` and `plain binaries` will match the OS.
+This is already done by QtCreator when building a project for a test run but you can also build manually with `cmale` like this from the project root:
+
+```bash
+cmake -S <source_path> -B <build_path>
+cmake --build <build_path>
+```
+
+Yes, the content of the build directory is already the app you can roll out.
+Thanks to `cmake` the binary file is created for the host machine automatically (`.exe` *and* `plain binaries` *will match the OS*).
 
 The only issue with those folders is that they might not contain the required Qt core libraries.
-There're couple of tools to work this around: `windeployqt` and `linuxdeployqt`.
+There're couple of tools for a workaround: [`windeployqt`](#deploying-for-windows) and [`linuxdeployqt`](#deploying-for-linux).
 Alternatively you can seek for the required `.dll` files in your Qt-root and copy them into the build directory `:3`
 
 If you want to compress the project down to a single executable, you have to add compiled Qt libraries yourself to it which will:
@@ -240,7 +246,7 @@ To use `linuxdeployqt` execute a similar command:
 linuxdeployqt <path-to-app-binary> -qmldir=<path>
 ```
 
-However:
+[However](https://github.com/probonopd/linuxdeployqt?tab=readme-ov-file#a-note-on-binary-compatibility):
 
 > `linuxdeployqt` refuses to work on systems any newer than
 the oldest currently still-supported Ubuntu LTS release,
@@ -248,20 +254,20 @@ because we want to encourage developers to build applications
 in a way that makes them possible to run
 on all still-supported distribution releases.
 
-which literally means that you might have to switch to an older Linux version.
+which literally means that you might have to switch to an older Linux version to use `linuxdeployqt`.
 For this sake there're GitHub Actions that allow to build for both Windows and Linux at once.
 
 ### GitHub Workflows
 
 Workflows are kind of routine scripts executed upon certain git events.
 Their execution can be monitored at the dedicated 'Actions' tab on the website.
-There're many such routines defined as actions and ready to use.
+There're many ready to use routines defined as actions you can add to your workflow.
 To build a Qt project you'll need these actions:
 1. Checkout - `actions/checkout@v6`
 2. Qt Installer - `jurplel/install-qt-action@v3`
 3. Artifact Uploader - `actions/upload-artifact@v4`
 
-as well as couple of building scripts.
+as well as couple of building scripts including `cmake`, [`windeployqt`](#deploying-for-windows) and [`linuxdeployqt`](#deploying-for-linux) commands from above.
 
 The workflow `.yml` file must be stored at `./.github/workflows/` directory.
 A single workflow file is built like this:
@@ -294,6 +300,6 @@ jobs:
           <command_to_run>
 ```
 
-An example workflow for this project is stored at [./.github/workflows/build_calculator.yml](../../.github/workflows/build_calculator.yml)
+An example workflow for this project is stored at [`./.github/workflows/build_calculator.yml`](../../.github/workflows/build_calculator.yml)
 
 See [the official syntax reference](https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax) for more options.
