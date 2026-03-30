@@ -68,7 +68,7 @@ jobs:
           cmake -S ./A8/Simple_Calculator/ -B ./A8/Simple_Calculator/build/ -DCMAKE_BUILD_TYPE=MinSizeRel
           cmake --build ./A8/Simple_Calculator/build/ --config MinSizeRel
 
-      - name: Package (windeployqt)
+      - name: Package (linuxdeployqt)
         run: |
           wget -c https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage
           chmod +x linuxdeployqt-continuous-x86_64.AppImage
@@ -77,5 +77,5 @@ jobs:
       - name: Upload Linux AppImage
         uses: actions/upload-artifact@v4
         with:
-          name: Simple_Calculator.app
+          name: Simple_Calculator
           path: ./A8/Simple_Calculator/build
