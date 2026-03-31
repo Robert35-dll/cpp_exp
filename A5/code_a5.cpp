@@ -76,8 +76,8 @@ void TestSwapping()
 void SwapInts(int &a, int &b)
 {
     int c = a;
-    a = b;
-    b = c;
+        a = b;
+        b = c;
 }
 
 /**
@@ -88,8 +88,8 @@ void SwapInts(int &a, int &b)
 void SwapInts(int *a, int *b)
 {
     int c = *a;
-    *a = *b;
-    *b = c;
+       *a = *b;
+       *b = c;
 }
 
 #pragma endregion [A5.1]
@@ -256,20 +256,14 @@ void PrintPolynom(float *termsCoeffs, int termsCoeffsAmount)
     for (int i = 0; i < termsCoeffsAmount; i++)
     {
         // If coefficient is 0 -> don't print anything
-        if (termsCoeffs[i] == 0)
-        {
-            continue;
-        }
+        if (termsCoeffs[i] == 0) { continue; }
 
         // For any other coefficient:
         // Step 1 - Print coefficients with their signs separately
         PrintCoefficient(termsCoeffs[i], isFirstTerm);
 
         // Step 2 - If a coefficient isn't the last one -> print the x term
-        if (i == termsCoeffsAmount - 1)
-        {
-            break;
-        }
+        if (i == termsCoeffsAmount - 1) { break; }
 
         cout << "x";
 

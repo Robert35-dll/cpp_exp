@@ -49,7 +49,7 @@ int main()
     cout << " |" << endl;
 
     delete cli;
-    return 1;
+    return 0;
 }
 
 #pragma region [A7.1]
@@ -60,11 +60,11 @@ int main()
  */
 void RunContactBook(SimpleCLI* const cli)
 {
-    map<string, string> contactMap;
+    map<string, string>           contactMap;
+    map<string, string>::iterator mapIterator;
+    pair<string, string>          newContact;
 
     string userInput;
-    map<string, string>::iterator mapIterator;
-    pair<string, string> newContact;
     while (true)
     {
         userInput = cli->GetStringInput("Enter contact's name (or 'Exit' to finish)");
@@ -106,7 +106,8 @@ void RunContactBook(SimpleCLI* const cli)
  */
 void RunAutoPark(SimpleCLI* const cli)
 {
-    vector<string> menuOptions = {
+    vector<string> menuOptions =
+    {
         "Add new driver",
         "Add vehicle",
         "List all drivers",
@@ -248,8 +249,8 @@ void ListDrivers(AutoPark* const park, SimpleCLI* const cli)
 {
     cli->LogMessage("Registered drivers:", false, true);
     
-    int driverAmount  = 0;
-    int vehicleAmount = 0;
+    int driverAmount    = 0;
+    int vehicleAmount   = 0;
     size_t vehicleCount = 0;
 
     auto i = park->begin();
@@ -268,7 +269,7 @@ void ListDrivers(AutoPark* const park, SimpleCLI* const cli)
         i = park->upper_bound(i->first);
     }
 
-    cli->LogMessage("Total drivers: " + to_string(driverAmount), false, true);
+    cli->LogMessage("Total drivers: "  + to_string(driverAmount), false, true);
     cli->LogMessage("Total vehicles: " + to_string(vehicleAmount), true, true);
 }
 /**
@@ -305,7 +306,7 @@ void SearchDriver(AutoPark* const park, SimpleCLI* const cli)
  */
 void SearchVehicle(AutoPark* const park, SimpleCLI* const cli)
 {
-    string vehicleId = cli->GetStringInput("Enter the vehicle's ID");
+    string vehicleId  = cli->GetStringInput("Enter the vehicle's ID");
     auto searchResult = FindVehicle(&vehicleId, park);
 
     if (searchResult == park->end())
@@ -314,9 +315,9 @@ void SearchVehicle(AutoPark* const park, SimpleCLI* const cli)
         return;
     }
 
-    cli->LogMessage("ID: " + searchResult->second.first, false);
-    cli->LogMessage("Kind: " + searchResult->second.second, false);
-    cli->LogMessage("Driver: " + searchResult->first, false);
+    cli->LogMessage("ID: "     + searchResult->second.first,  false);
+    cli->LogMessage("Kind: "   + searchResult->second.second, false);
+    cli->LogMessage("Driver: " + searchResult->first,         false);
 
     cout << " |" << endl;
 }
@@ -349,7 +350,7 @@ void RemoveDriver(AutoPark* const park, SimpleCLI* const cli)
  */
 void RemoveVehicle(AutoPark* const park, SimpleCLI* const cli)
 {
-    string vehicleId = cli->GetStringInput("Enter the vehicle's ID");
+    string vehicleId  = cli->GetStringInput("Enter the vehicle's ID");
     auto searchResult = FindVehicle(&vehicleId, park);
 
     if (searchResult == park->end())

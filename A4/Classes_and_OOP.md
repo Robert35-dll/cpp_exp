@@ -10,7 +10,8 @@ However C++ allows to split class declaration and implementation into two files:
 
 An `.h` header file represents the interface of a class and should not contain any unnecessary `#include`s since it might significantly affect build time and performance.
 
-A `.cpp` source file represents the implementation of its header. If any library included in `.h` file is directly used in the `.cpp` file, it has to be included there as well.
+A `.cpp` source file represents the implementation of its header.
+If any library included in `.h` file is directly used in the `.cpp` file, it has to be included there as well.
 
 ## Creating a Class
 
@@ -63,7 +64,7 @@ Every object (_instance of a non-static class_) is created by calling a class' c
 class C
 {
     private:
-        int Count;
+        int  Count;
         bool IsActive;
     
     public:
@@ -98,7 +99,7 @@ If you want to do so, you have to define such values either in the declaration o
 class C
 {
     private:
-        int Count;
+        int  Count;
         bool IsAlive;
     
     public:
@@ -261,7 +262,7 @@ class DescendantPrivate : private Ancestor
 };
 ```
 
-To treat all these descendants in the same way (*e.g. to use them as parameters or store in the same container*) pointers should be used:
+To treat all these descendants in the same way (_e.g. to use them as parameters or store in the same container_) pointers should be used:
 
 ```c++
 // For this example all classes have been split into separate files
@@ -291,17 +292,17 @@ population.push_back(dPri);
 
 **Keep in mind** that if any method is reimplemented by descendants and is called from such container, consider either:
 
-- Casting the container element (*pointer*) to descendant class' one or
+- Casting the container element (_pointer_) to descendant class' one or
 - Specifying virtual methods.
 
-Without one of those options calling any method by dereferencing a pointer will lead to execution of its base method (*the one implemented by* `Ancestor`).
+Without one of those options calling any method by dereferencing a pointer will lead to execution of its base method (_the one implemented by_ `Ancestor`).
 
 ### Virtual Methods
 
 In order to stress a polymorphic behaviour of descendants it's common to put `virtual` and `override` keywords to their methods:
 
-- `virtual` stays for "*there may be a descendant that implements this method too. Check that implementation first.*"
-- `override` stays for "*this method is inherited from the ancestor class and there's another implementation of it.*"
+- `virtual` stays for "_there may be a descendant that implements this method too. Check that implementation first._"
+- `override` stays for "_this method is inherited from the ancestor class and there's another implementation of it._"
 
 ```c++
 class Ancestor
@@ -321,7 +322,7 @@ public:
 };
 ```
 
-It's worth noticing that a method can be either virtual or static (*or none of both* `:D`).
+It's worth noticing that a method can be either virtual or static (_or none of both_ `:D`).
 
 Another good hint is given by [this cppreference](https://en.cppreference.com/w/cpp/language/virtual.html):
 
@@ -421,7 +422,7 @@ class Child : public Dad, public Mom
 }
 ```
 
-While using multiple inheritance it's crucial to specify virtual inheritance from farther ancestors (*Grandpa and Grandpa in above example*).
+While using multiple inheritance it's crucial to specify virtual inheritance from farther ancestors (_Grandpa and Grandpa in above example_).
 Such virtual inheritance ensures members' unambiguity withing a single descendant's instance.
 The whole inheritance tree would look like this:
 
@@ -537,7 +538,7 @@ Therefore you have to implement a custom destructor and free used memory manuall
 class C
 {
     private:
-        int Count;
+        int  Count;
         int* pCount;
 
     public:
@@ -545,7 +546,7 @@ class C
         C(int count_)
             : Count(count_)
         {
-            pCount = new int;
+            pCount  = new int;
             *pCount = Count;
         }
         // Destructor

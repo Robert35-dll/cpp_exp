@@ -1,6 +1,6 @@
 # Basics of C++
 
-This is the knowledge of my very first C++ class :D
+This is the knowledge of my very first C++ class `:D`
 
 ## Creating C++ Programs
 
@@ -79,7 +79,8 @@ string line;
 std::getline(std::cin, line);
 ```
 
-If you execute your programs via CLI, it may be useful to pause the window after script executed. The way you do this depends on your OS:
+If you execute your programs via CLI, it may be useful to pause the window after script executed.
+The way you do this depends on your OS:
 
 ```c++
 // Method for Linux
@@ -107,7 +108,7 @@ In C++ there're all well-known data types (_+ a bit more_):
 | `char` | [ -128; 127 ] or [ 0; 255 ] | Depending on compiler either as `signed char` or as `unsigned char` |
 | `wchar_t` | [ 0; 65535 ] or [ 0; 4.294.967.295 ] | Storing `int`s, single letter or character (_UTF-16 or UTF-32_) |
 
-Unsigned `int`s and `long`s have their ranges shifter to the positive side, e.g. `unsigned int`'s range is [ 0; 4294967295 ].
+Unsigned `int`s and `long`s have their ranges shifted to the positive side, e.g. `unsigned int`'s range is [ 0; 4294967295 ].
 
 To check limits of a certain data type check these functions of `limits` static library:
 

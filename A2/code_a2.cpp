@@ -18,16 +18,22 @@ void ValidateString(string);
 string CensorString(string, char censorChar='-');
 char GetCharValidationCode(char);
 
-int main() {
-
+int main()
+{
     // A2.1
+    cout << "[*] A2.1" << endl;
     CalculateMenuCalories();
+    cout << " |" << endl;
 
     // A2.2
+    cout << "[*] A2.2" << endl;
     RunCalculator();
+    cout << " |" << endl;
 
     // A2.3
+    cout << "[*] A2.3" << endl;
     ValidateString("");
+    cout << " |" << endl;
 
     return 0;
 }
@@ -38,10 +44,11 @@ int main() {
  * @brief - Solution to the A2.1 exercise where a simple calories calculation
  *          has to be preformed.
  */
-void CalculateMenuCalories() {
+void CalculateMenuCalories()
+{
     // Defining required variables
-    short calories = 0;
-    unsigned char option = 0;
+    short         calories = 0;
+    unsigned char option   = 0;
 
     // Requesting input
     cout << "[?] Such dir was aus:" << endl;
@@ -49,12 +56,13 @@ void CalculateMenuCalories() {
     cout << "[>] Deine Auswahl: ";
 
     // Reading the first char (ASCII-Code of a number)
-    cin >> option;
+    cin    >> option;
     // and converting it into an actual number
     option -= '0';
     
     // If the first option is invalid, break the process
-    if (1 > option || option > 3) {
+    if (1 > option || option > 3)
+    {
         cout << "[!] Gibt's heute nicht >:(" << endl;
         return;
     }
@@ -68,7 +76,7 @@ void CalculateMenuCalories() {
     cout << "[>] Deine Auswahl: ";
 
     // Reading one more char (ASCII-Code of a number) and converting it
-    cin >> option;
+    cin    >> option;
     option -= '0';
 
     // This reading will give the leftover from the first one
@@ -90,25 +98,30 @@ void CalculateMenuCalories() {
  * @retval The updated (increased) amount of calories or the same one,
  *         if the option is invalid.
  */
-short AddCalories(short calories, int option) {
+short AddCalories(short calories, int option)
+{
     // Since there're 2x3 options, it's possible to
     // spare thee of them by adding an if-statement
     // in each case (ik it's a very hard coded
     // solution tho) X(
-    switch (option) {
-        case 1: {
+    switch (option)
+    {
+        case 1:
+        {
             calories += calories < 600
                 ? 900
                 : 30;
             break;
         }
-        case 2: {
+        case 2:
+        {
             calories += calories < 600
                 ? 870
                 : 50;
             break;
         }
-        case 3: {
+        case 3:
+        {
             calories += calories < 600
                 ? 600
                 : 0;
@@ -126,9 +139,10 @@ short AddCalories(short calories, int option) {
  * @brief Asks for required number and operator inputs
  *        to perform a simple mathematical operations: +, -, * and /.
  */
-void RunCalculator() {
+void RunCalculator()
+{
     float a = GetNumberInput("Eingabe Zahl1:");
-    char o = GetOperatorInput("Eingabe Operator:");
+    char  o = GetOperatorInput("Eingabe Operator:");
     float b = GetNumberInput("Eingabe Zahl2:");
 
     float result = Calculate(a, b, o);
@@ -142,26 +156,31 @@ void RunCalculator() {
  * @param requestLine: The line to request an input with.
  * @retval A float number provided by user.
  */
-float GetNumberInput(string requestLine) {
+float GetNumberInput(string requestLine)
+{
     // Defining required variables
     string rawInput;
-    float inputNumber;
+    float  inputNumber;
 
     // Asking for input
     cout << "[<] " << requestLine << ' ';
 
-    while (true) {
+    while (true)
+    {
         // Reading the next input
         //* Note: Cast automatically to a number of the target variable's type
         cin >> rawInput;
 
         // Trying to convert the input to float,
         // if succeeded -> breaking the loop and returning the number,
-        // if failed -> asking for input again
-        try {
+        // otherwise    -> asking for input again
+        try
+        {
             inputNumber = stof(rawInput);
             break;
-        } catch (invalid_argument) {
+        }
+        catch (invalid_argument)
+        {
             cout << "[!] Bitte eine Zahl eingeben!" << endl;
             cout << "[<] " << requestLine << ' ';
         }
@@ -185,19 +204,21 @@ float GetNumberInput(string requestLine) {
 char GetOperatorInput(string requestLine) {
     // Defining required variables
     string rawInput;
-    char inputOperator;
+    char   inputOperator;
 
     // Asking for input
     cout << "[<] " << requestLine << ' ';
 
-    while (true) {
+    while (true)
+    {
         // Reading the next input
         //* Note: Cast automatically to a number of the target variable's type
         cin >> rawInput;
 
         // Validating the input by checking whether:
         // 1) it's a single char
-        if (rawInput.length() != 1) {
+        if (rawInput.length() != 1)
+        {
             cout << "[!] Bitte den Operator als ein Zeichen eingeben!" << endl;
             cout << "[<] " << requestLine << ' ';
             
@@ -206,15 +227,18 @@ char GetOperatorInput(string requestLine) {
         
         // 2) it's a valid operator,
         // if succeeded -> breaking the loop and returning the operator's char,
-        // if failed -> asking for input again
+        // otherwise    -> asking for input again
         if (rawInput[0] == '+' ||
             rawInput[0] == '-' ||
             rawInput[0] == '*' ||
-            rawInput[0] == '/') {
+            rawInput[0] == '/')
+        {
             inputOperator = rawInput[0];
 
             break;
-        } else {
+        }
+        else
+        {
             cout << "[!] Bitte einen Operator eingeben! (+, -, *, /)" << endl;
             cout << "[<] " << requestLine << ' ';
 
@@ -235,35 +259,45 @@ char GetOperatorInput(string requestLine) {
  * @retval A float number of the operation's result or 0, if an invalid
  *         operation was specified.
  */
-float Calculate(float a, float b, char operation) {
+float Calculate(float a, float b, char operation)
+{
     // Defining required variables
     float calculation = 0.0;
 
     // Seeking the specified operation,
     // if failed -> leaving the default value for the result
-    switch (operation) {
-        case '+': {
+    switch (operation)
+    {
+        case '+':
+        {
             calculation = a + b;
             break;
         }
-        case '-': {
+        case '-':
+        {
             calculation = a - b;
             break;
         }
-        case '*': {
+        case '*':
+        {
             calculation = a * b;
             break;
         }
-        case '/': {
+        case '/':
+        {
             //* Don't forget an edge case ಠ_ಠ
-            if (b != 0) {
+            if (b != 0)
+            {
                 calculation = a / b;
-            } else {
+            }
+            else
+            {
                 cout << "[!] Man darf nicht durch 0 dividieren!" << endl;
             }
             break;
         }
-        default: {
+        default:
+        {
             cout << "[!] Ungültiger Operator. Kann nicht rechnen!" << endl;
         }
     }
@@ -278,7 +312,8 @@ float Calculate(float a, float b, char operation) {
  * @brief Prints a valid string with invalid characters substituted with '-'.
  * @param  invalidString: The string to validate.
  */
-void ValidateString(string invalidString) {
+void ValidateString(string invalidString)
+{
     cout << "[<] Überprüfe den String auf ungültige Zeichen: ";
     cout << "'" << invalidString << "'" << endl;
 
@@ -295,37 +330,42 @@ void ValidateString(string invalidString) {
  * @param censorChar: The char to replace disallowed chars with.
  * @retval A censored string with allowed chars only.
  */
-string CensorString(string uncensoredString, char censorChar) {
+string CensorString(string uncensoredString, char censorChar)
+{
     // Defining required variables
     string censoredString;
-    char checkChar;
-    char charValidationCode;
+    char   checkChar;
+    char   charValidationCode;
 
-    int validCharsCount = 0;
+    int validCharsCount   = 0;
     int invalidCharsCount = 0;
 
     //* Allowed chars and their codes:
-    // {45} - '_'
-    // [48; 57] - ['0'; '9']
-    // [65; 90] - ['A'; 'Z']
+    // {45}      - '_'
+    // [48; 57]  - ['0'; '9']
+    // [65; 90]  - ['A'; 'Z']
     // [97; 122] - ['a'; 'z']
 
     // Iterating through the string
-    for (size_t i = 0; i < uncensoredString.length(); i++) {
+    for (size_t i = 0; i < uncensoredString.length(); i++)
+    {
         // Accessing the string's char
-        checkChar = uncensoredString[i];
+        checkChar          = uncensoredString[i];
         // and checking, whether it's a valid one or not
         charValidationCode = GetCharValidationCode(checkChar);
 
         // If char's invalid -> add the censorChar to the output,
         // If char's valid -> add itself instead
-        switch (charValidationCode) {
-            case '-': {
-                censoredString += censorChar;
+        switch (charValidationCode)
+        {
+            case '-':
+            {
+                censoredString   += censorChar;
                 invalidCharsCount++;
                 break;
             }
-            default: {
+            default:
+            {
                 censoredString += checkChar;
                 validCharsCount++;
             }
@@ -333,7 +373,7 @@ string CensorString(string uncensoredString, char censorChar) {
     }
 
     // Printing some additional output (。・ω・。)
-    cout << " |-<*> Amount of valid chars: " << validCharsCount << endl;
+    cout << " |-<*> Amount of valid chars: "   << validCharsCount   << endl;
     cout << " |-<*> Amount of invalid chars: " << invalidCharsCount << endl;
 
     return censoredString;
@@ -346,11 +386,12 @@ string CensorString(string uncensoredString, char censorChar) {
  * @param c: The char to get the code of.
  * @retval A char representing the code of the given one.
  */
-char GetCharValidationCode(char c) {
-    if (95 == c) return '_';
-    if (48 <= c && c <= 57) return '0';
-    if (65 <= c && c <= 90) return 'A';
-    if (97 <= c && c <= 122) return 'a';
+char GetCharValidationCode(char c)
+{
+    if (95 == c) { return '_'; }
+    if (48 <= c && c <= 57 ) { return '0'; }
+    if (65 <= c && c <= 90 ) { return 'A'; }
+    if (97 <= c && c <= 122) { return 'a'; }
 
     return '-';
 }

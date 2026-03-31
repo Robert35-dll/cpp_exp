@@ -47,5 +47,5 @@ int main()
 
     cli.InsertLineBreak(true);
 
-    return 1;
+    return 0;
 }

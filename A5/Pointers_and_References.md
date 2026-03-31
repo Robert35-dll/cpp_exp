@@ -29,7 +29,7 @@ Such address is stored in a pointer variable.
 
 ## Pointers
 
-Pointers are nothing more than variables that store memory addresses of other variables (_probably also pointers :3_) as follows:
+Pointers are nothing more than variables that store memory addresses of other variables (_probably also pointers_ `:3`) as follows:
 
 ```c++
 // Initializing an int variable
@@ -40,14 +40,14 @@ int* pAge = &age;
 // another way to create pointer named p
 // int *p = &age;
 
-cout << age << endl;        // Output: 14
-cout << pAge << endl;       // Possible output: 0x5ffecc (address of age)
+cout << age   << endl;      // Output: 14
+cout << pAge  << endl;      // Possible output: 0x5ffecc (address of age)
 
 cout << *pAge << endl;      // Output: 14 (pointed value of pAge)
 cout << &pAge << endl;      // Possible output: 0x5ffec0 (address of pAge)
 ```
 
-Since pointers are variables they also have their own addresses :3
+Since pointers are variables they also have their own addresses `:3`
 If some pointer is used but neither is initialized nor points to an allocated memory, there is a fatal error which crashes the program.
 To prevent such errors you can do the following:
 
@@ -71,23 +71,23 @@ Additionally you can lock pointers and their linked values by using `const` key 
 
 ```c++
 // Standard usage
-int a = 14;
+int  a  = 14;
 int* pA = &a;
 
 // Locking linked value
 const int* cpA = &a;
 *cpA = 0;                       // Error: expression must be modifiable value
-cpA = nullptr;
+cpA  = nullptr;
 
 // Locking pointer
 int* const pcA = &a;
 *pcA = 0;
-pcA = nullptr;                  // Error: expression must be modifiable value
+pcA  = nullptr;                 // Error: expression must be modifiable value
 
 // Locking both linked value and pointer
 const int* const cpcA = &a;
 *cpcA = 0;                      // Error: expression must be modifiable value
-cpcA = nullptr;                 // Error: expression must be modifiable value
+cpcA  = nullptr;                // Error: expression must be modifiable value
 ```
 
 ## References
