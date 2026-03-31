@@ -47,9 +47,9 @@ int main()
 void TestCaesarCiphering()
 {
     Caesar caesar;
-    int customCipherKey = -5;
+    int    customCipherKey = -5;
 
-    string text = "Cipher me please OwO";
+    string text   = "Cipher me please OwO";
     string cipher = caesar.Cipher(text, customCipherKey);
 
     cout << "[>] Original text: " << text << endl;
@@ -98,14 +98,14 @@ class Rechteck
         double Flaeche()
         {
             double laenge = abs(P2.getX() - P1.getX());
-            double hoehe = abs(P2.getY() - P1.getY());
+            double hoehe  = abs(P2.getY() - P1.getY());
 
             return laenge * hoehe;
         }
         double Umfang()
         {
             double laenge = abs(P2.getX() - P1.getX());
-            double hoehe = abs(P2.getY() - P1.getY());
+            double hoehe  = abs(P2.getY() - P1.getY());
             
             return 2 * (laenge + hoehe);
         }
@@ -128,11 +128,11 @@ void TestRectangles()
     double x, y;
 
     cout << "[>] Koordinaten X und Y vom Punkt A: ";
-    cin >> x >> y;
+    cin  >> x >> y;
     A.set(x, y);
 
     cout << "[>] Koordinaten X und Y vom Punkt B: ";
-    cin >> x >> y;
+    cin  >> x >> y;
     B.set(x, y);
     
     cout << " |" << endl;
@@ -159,10 +159,10 @@ void TestRectangles()
 void ManageSIMcard()
 {
     vector<string> menuOptions = { "Create a SIMcard" };
-    SimpleCLI cli = SimpleCLI(menuOptions);
+    SimpleCLI      cli         = SimpleCLI(menuOptions);
 
     // The option is guaranteed to be 1 at this point :)
-    int option = cli.GetOptionChoice();
+    int     option  = cli.GetOptionChoice();
     SIMcard simCard = CreateSIMcard(cli);
 
     menuOptions =
@@ -232,9 +232,9 @@ SIMcard AddContact(SimpleCLI cli, SIMcard card)
 {
     cli.LogWarning("Adding new contact...", false, true);
 
-    string contactName = cli.GetStringInput("Enter contact's name");
-    int contactNumber = cli.GetIntInput("Enter contact's number");
-    int pin = cli.GetIntInput("Enter the PIN of your card");
+    string contactName   = cli.GetStringInput("Enter contact's name");
+    int    contactNumber = cli.GetIntInput("Enter contact's number");
+    int    pin           = cli.GetIntInput("Enter the PIN of your card");
 
     bool result = card.trageEin(contactName, contactNumber, pin);
     if (!result && contactNumber == 0)
@@ -262,10 +262,10 @@ SIMcard AddContact(SimpleCLI cli, SIMcard card)
 SIMcard SearchContact(SimpleCLI cli, SIMcard card)
 {
     string contactName = cli.GetStringInput("Enter contact's name");
-    int pin = cli.GetIntInput("Enter the PIN of your card");
+    int    pin         = cli.GetIntInput("Enter the PIN of your card");
 
     string output;
-    int result = card.sucheNummer(contactName, pin);
+    int    result = card.sucheNummer(contactName, pin);
     switch (result)
     {
         case -1:

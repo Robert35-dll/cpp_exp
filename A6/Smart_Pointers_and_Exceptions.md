@@ -54,18 +54,18 @@ Check those for extensive knowledge and a deeper dive into the topic.
 Smart pointers are basically wrappers for raw pointers.
 These have two significant advantages:
 1. A smart pointer is destroyed automatically upon leaving the scope where it has been defined.
-2. The value a smart pointer refers to is destroyed when its owners count (*amount of smart pointers to that object owning it*) reaches 0.
+2. The value a smart pointer refers to is destroyed when its owners count (_amount of smart pointers to that object owning it_) reaches 0.
 
-However it's still possible to manually delete the pointed value and therefore make all its smart pointers invalid at once :3
+However it's still possible to manually delete the pointed value and therefore make all its smart pointers invalid at once `:3`
 
 The underlying structure of smart pointers is rather simple and consists of:
 1. A pointer to the actual value.
 2. A pointer to control block which consists of:
    - Either a pointer or the value itself
-   - Deleter (*to remove pointers or delete the value*)
-   - Allocator (*to add pointers*)
-   - Owners count (*amount of assigned shared pointers*)
-   - Reference count (*amount of assigned weak pointers*)
+   - Deleter (_to remove pointers or delete the value_)
+   - Allocator (_to add pointers_)
+   - Owners count (_amount of assigned shared pointers_)
+   - Reference count (_amount of assigned weak pointers_)
 
 The very first smart pointer was `auto_ptr`.
 It served similar purpose as `unique_ptr` does now and was replaced by the last with release of C++11.
@@ -177,7 +177,7 @@ To avoid this try to initialize values within pointers' constructors or stick to
 
 #### The trickiest part
 
-It is possible to specify the pointed value (*the one stored in the variable's part*) while keeping ownership of another one (*stored in the control block*).
+It is possible to specify the pointed value (_the one stored in the variable's part_) while keeping ownership of another one (_stored in the control block_).
 Due to lack of experience I'm not going to touch such use cases or make any assumptions at this point.
 If you wish to go into the rabbit hole of shared pointers, check (8) of [this cppreference](https://en.cppreference.com/w/cpp/memory/shared_ptr/shared_ptr.html) or code example of [this cppreference](https://en.cppreference.com/w/cpp/memory/shared_ptr/get.html).
 
@@ -233,10 +233,12 @@ In C++ value of any type can be thrown as an exception and be direcly used in th
 #include <string>
 using namespace std;
 
-try {
+try
+{
     throw "smth went wrong \\@o@/";
 }
-catch (string errMsg) {
+catch (string errMsg)
+{
     cout << "Oh no:" << errMsg << endl;
 }
 ```
@@ -251,10 +253,12 @@ These work in the exact same way as plain exceptions with an additional inherita
 #include <string>
 using namespace std;
 
-try {
+try
+{
     throw runtime_exception("smth ran wrong x.x");
 }
-catch (const runtime_exception& runEx) {
+catch (const runtime_exception& runEx)
+{
     // All exceptions have a what() explanation method
     cout << "Oh no:" << runEx.what() << endl;
 }
@@ -270,7 +274,8 @@ However the only difference to predefined ones is going to be the overriden `wha
 #include <string>
 using namespace std;
 
-class CustomException : public exception {
+class CustomException : public exception
+{
 private:
     string errMsg;
 
@@ -279,9 +284,7 @@ public:
         : errMsg(errMsg_)
     {};
 
-    const char* what() {
-        return errMsg.c_str();
-    }
+    const char* what() { return errMsg.c_str(); }
 }
 ```
 

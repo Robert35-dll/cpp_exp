@@ -4,7 +4,7 @@ Here are some basic notes about using pairs, maps and multimaps.
 
 ## Pairs
 
-Pairs are rather simple structs which can store values of any data type (*even pairs themselves*):
+Pairs are rather simple structs which can store values of any data type (_even pairs themselves_):
 For nested pairs it's helpful to use `#define` statements to simplify long definitions:
 
 ```c++
@@ -41,10 +41,10 @@ namedPoint.second = p;
 ## Maps
 
 If you try to combine multiple pairs into a unite structure, you probably come to an implementation of a map.
-Maps are data structures that store key-value pairs (*aka assosiative containers*) that have following properties:
+Maps are data structures that store key-value pairs (_aka assosiative containers_) that have following properties:
 
 - All keys are unique
-- All keys are sorted by the comparison function (*either implicit by direct key comparison or explicit by map declaration*)
+- All keys are sorted by the comparison function (_either implicit by direct key comparison or explicit by map declaration_)
 - Different keys may have same values
 
 ```c++

@@ -39,10 +39,7 @@ int SimpleCLI::GetOptionChoice()
     
         choice = GetIntInput("Enter a respective number", true);
 
-        if (choice == -1 || IsValidChoice(choice - 1))
-        {
-            break;
-        }
+        if (choice == -1 || IsValidChoice(choice - 1)) { break; }
 
         LogError("Please enter a valid option from the list >:(", true);
     }
@@ -63,25 +60,32 @@ int SimpleCLI::GetIntInput(string requestLine, bool isSigned /*= false*/)
 {
     // Defining required input variables
     string rawInput;
-    int numberInput;
+    int    numberInput;
 
-    while (true) {
+    while (true)
+    {
         // Asking for input
         cout << InputIndicator << " " << requestLine << ": ";
-        cin >> rawInput;
+        cin  >> rawInput;
 
         // Trying to convert the input to int,
         // if succeeded -> break the loop,
         // if failed -> skip the iteration
-        try {
+        try
+        {
             numberInput = stoi(rawInput);
-            if (!isSigned && numberInput < 0) {
+            if (!isSigned && numberInput < 0)
+            {
                 throw range_error("Please enter a positive number.");
             }
-        } catch (invalid_argument) {
+        }
+        catch (invalid_argument)
+        {
             LogError("Please enter a number!", true);
             continue;
-        } catch (range_error) {
+        }
+        catch (range_error)
+        {
             LogError("Please enter a positive number!", true);
             continue;
         }
@@ -104,15 +108,17 @@ string SimpleCLI::GetStringInput(string requestLine)
     // Defining required input variable
     string rawInput;
 
-    while (true) {
+    while (true)
+    {
         // Asking for input
         cout << InputIndicator << " " << requestLine << ": ";
-        cin >> rawInput;
+        cin  >> rawInput;
 
         // Validating the string,
         // if succeeded -> break the loop,
         // if failed -> iterate again
-        if (rawInput.length() >= 1 && rawInput.at(0) != ' ') {
+        if (rawInput.length() >= 1 && rawInput.at(0) != ' ')
+        {
             break;
         }
 
@@ -134,25 +140,32 @@ float SimpleCLI::GetFloatInput(string requestLine, bool isSigned /*= false*/)
 {
     // Defining required input variables
     string rawInput;
-    float numberInput;
+    float  numberInput;
 
-    while (true) {
+    while (true)
+    {
         // Asking for input
         cout << InputIndicator << " " << requestLine << ": ";
-        cin >> rawInput;
+        cin  >> rawInput;
 
         // Trying to convert the input to float,
         // if succeeded -> break the loop,
         // if failed -> skip the iteration
-        try {
+        try
+        {
             numberInput = stof(rawInput);
-            if (!isSigned && numberInput < 0) {
+            if (!isSigned && numberInput < 0)
+            {
                 throw range_error("Please enter a positive number.");
             }
-        } catch (invalid_argument) {
+        }
+        catch (invalid_argument)
+        {
             LogError("Please enter a number!", true);
             continue;
-        } catch (range_error) {
+        }
+        catch (range_error)
+        {
             LogError("Please enter a positive number!", true);
             continue;
         }
