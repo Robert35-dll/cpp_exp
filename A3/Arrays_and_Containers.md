@@ -29,7 +29,9 @@ int table[10][10] = { 2 };
 ```
 
 However there's a tricky (_actually dangerous_) feature hiding behind the lines. 
-Most (OOP) languages (_including C++_) strongly restrict accessing arrays elements by its bounds (_0 to arrays' length - 1_). If you try to overcome these bounds, you get some kind of `IndexOutOfBoundsException`. C is kind of not designed to check these by default:
+Most (_OOP_) languages (_including C++_) strongly restrict accessing arrays elements by its bounds (_0 to arrays' length - 1_).
+If you try to overcome these bounds, you get some kind of `IndexOutOfBoundsException`.
+C is kind of not designed to check these by default:
 
 ```c
 // Creating an array of length 3
@@ -49,8 +51,8 @@ for (int i = 0; i < 4; i++) {
 }
 ```
 
-In the above code a value has been written to a memory space not associated with the `numbers` array at all.
-Such failures can lead to so called _segmentation faults_ (_accessing memory not reserved by a whole program_) and unexpected behavior, which is the most difficult to debug.
+In the above code a value has been written to a memory space not associated with the `numbers` array.
+Such failures can lead to so called _segmentation faults_ (_accessing memory not reserved by a program_) and undefined behavior, which is one of the most difficult to debug.
 
 ### C-Strings
 
@@ -82,7 +84,7 @@ There're some key features unions have:
 - All fields are stored in **the same** memory segment
 - The size of the segment is set to fit the biggest field of a union
 
-Since by writing into a smaller field the bigger one will be changed as well, unions are most likely to be avoided nowadays.
+Since by writing a smaller value into the union will change all stored in there as well, unions are most likely to be avoided nowadays.
 
 ## C++ Structures
 
@@ -90,7 +92,7 @@ These are practically extending the usage and increase safety of previous [C-nat
 
 ### STL Arrays
 
-Just like [C-Array](#c-arrays) but with `IndexOutOfBoundsException`:
+Just like [C-Array](#c-arrays) but with `std::out_of_range` exception:
 
 ```c++
 #include <array>
@@ -99,8 +101,9 @@ Just like [C-Array](#c-arrays) but with `IndexOutOfBoundsException`:
 std::array<int, 10> stlArray;
 // Iterating through it (specific size_t type)
 for (size_t i = 0; i < stlArray.size(); i++) {
+    // This won't throw an exception until C++26 :c
     stlArray[i] = i;
-    // Alternatively (also safer)
+    // This can throw an exception c:
     stlArray.at(i) = i;
 }
 
@@ -110,7 +113,7 @@ const size_t maxsize = stlArray.max_size();
 
 Funny notice:
 ```c++
-// This works
+// This works (leads to undefined behavior)
 int nums[2] = { 1 };
 cout << nums[2] << endl;
 
@@ -135,16 +138,16 @@ typedef int[100] int_array;
 
 ### Structs
 
-Just like [unions](#unions) in C but w/o _memory sparing complex_ xD
+Just like [unions](#unions) in C but w/o _memory sparing complex_ `xD`
 
 ```c++
 // Defining a struct as high as possible
 // to let compiler know as early as possible
 struct shoe {
-    unsigned short usSize = 0;
-    string brand = "notSpecified";
-    eZipper zipper = notSet;
-    string colorName = "notSpecified";
+    unsigned short usSize    = 0;
+    string         brand     = "notSpecified";
+    eZipper        zipper    = notSet;
+    string         colorName = "notSpecified";
 };
 
 shoe shoe1;
@@ -168,14 +171,14 @@ Enums are practically a stricter form of structs (_also available in C_):
 ```c++
 // Enums cannot be changed after declaration
 enum eZipper {
-    // They also can contain only data types
-    Simple = 3,
-    Modern = 1,
+    // They also can contain only one data type
+    Simple  = 3,
+    Modern  = 1,
     Western = 0
 }
 ```
 
-Enums are the perfect choice for cases, when a static option has to be used.
+Enums are the perfect choice for cases, when a static options have to be used frequently.
 
 ### STL Vectors
 
@@ -236,4 +239,4 @@ std::vector<double> eaten;
 drunk.swap(eaten);
 ```
 
-Keep in mind, that an iterator represents an address of a vector's element (_a pointer_).
+Keep in mind, that an iterator represents the memory address of a vector's element (_a pointer_).

@@ -8,7 +8,7 @@ To convert one number type to another, you can use either a C-style or a C++-sty
 
 ### C-style Number Cast
 
-The C-style number cast syntax is commonly used in most other languages:
+The C-style number cast syntax is commonly used in other languages:
 
 ```c++
 // Initializing an int variable
@@ -25,7 +25,8 @@ float c = a;
 int a = b;
 ```
 
-However this option is quite unwelcome (_almost completely avoided_) across C++ community because of its implicit distinguishing between different casting processes and compile time type-restriction. See [this topic on Stack Overflow](https://stackoverflow.com/a/26269263) for more details.
+However this option is quite unwelcome (_almost completely avoided_) across C++ community because of its implicit distinguishing between different casting processes and compile time type-restriction.
+See [this topic on StackOverflow](https://stackoverflow.com/a/26269263) for more details.
 
 ### C++-style Number Cast
 
@@ -36,7 +37,7 @@ In C++ there're a quite more functions to convert a number variable to another t
 | Static Cast | `static_cast<type>(variable)` | Number casting, inheritance upcasting |
 | Dynamic Cast | `dynamic_cast<type*>(variable*)` | Inheritance downcasting (_might return null pointer!_) |
 | Const Cast | `const_cast<type*>(&variable)` | Addition/Removal of `const` or `volatile` qualifiers |
-| Reinterpret Cast | `reinterpret_cast<type*>(&variable)` | Converting to unrelated (_pointer_) types, e.g. int -> void |
+| Reinterpret Cast | `reinterpret_cast<type*>(&variable)` | Converting to unrelated (_pointer_) types, e.g. `int -> void` |
 
 ## Char to Number
 
@@ -76,7 +77,7 @@ If the converted value exceeds the target's range, even _undefined behavior_ mig
 
 ### C++-style String Cast
 
-Before starting to work with C++ strings consider including `<string>` from C++ standard template library.
+Before starting to work with C++ strings consider to `#include <string>` from C++ standard template library.
 The related functions are quite similar to those of C-style but provide more code security.
 Here's an example usage:
 
@@ -89,8 +90,8 @@ double numberInput;
 cin >> rawInput;
 
 // Trying to convert the input to float,
-// if succeeded -> set the converted value,
-// if failed -> set a default value
+// If succeeded -> set the converted value,
+// Otherwise    -> set a default value
 try {
     numberInput = stof(rawInput);
 } catch (invalid_argument) {
