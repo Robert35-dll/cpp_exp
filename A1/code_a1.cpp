@@ -3,7 +3,8 @@
 
 using namespace std;
 
-int main() {
+int main()
+{
     // `#pragma region` is VS Code specific feature
     // to create code blocks
     #pragma region [A1.2]
